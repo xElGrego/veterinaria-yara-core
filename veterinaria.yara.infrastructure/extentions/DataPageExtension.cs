@@ -45,8 +45,8 @@ public static class DataPageExtension
         PaginationFilterResponse<T> paged = new PaginationFilterResponse<T>();
         paged.pagination.Limit = limit;
         List<S> consulta = await query.Skip(startRow).Take(limit).ToListAsync();
-        paged.data = _mapper.Map<List<T>>(consulta);
-        int totalItemsCountTask = await query.CountAsync();
+        paged.consulta = _mapper.Map<List<T>>(consulta);
+        var totalItemsCountTask = await query.CountAsync();
         paged.pagination.Total = totalItemsCountTask;
         paged.pagination.Returned = consulta.Count();
         paged.pagination.Offset = startRow;
@@ -64,7 +64,7 @@ public static class DataPageExtension
         PaginationFilterResponse<T> paged = new PaginationFilterResponse<T>();
         paged.pagination.Limit = limit;
         List<T> consulta = await query.Skip(startRow).Take(limit).ToListAsync();
-        paged.data = _mapper.Map<List<T>>(consulta);
+        paged.consulta = _mapper.Map<List<T>>(consulta);
         int totalItemsCountTask = await query.CountAsync();
         paged.pagination.Total = totalItemsCountTask;
         paged.pagination.Returned = consulta.Count();

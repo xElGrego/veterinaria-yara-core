@@ -35,25 +35,47 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
                 if (idUsuario != Guid.Empty)
                 {
-                    mascotasQuery = mascotasQuery.Where(m => m.UsuarioMascota.Any(um => um.IdUsuario == idUsuario));
+
+
+                    mascotasQuery = mascotasQuery
+               .Join(
+                   _dataContext.UsuarioMascotas,
+                   mascota => mascota.IdMascota,
+                   usuarioMascota => usuarioMascota.IdMascota,
+                   (mascota, usuarioMascota) => new { Mascota = mascota, UsuarioMascota = usuarioMascota })
+               .Where(joinResult => joinResult.UsuarioMascota.IdUsuario == idUsuario)
+               .Select(joinResult => joinResult.Mascota);
+
+
+                    //mascotasQuery = mascotasQuery.Where(m => m.UsuarioMascota.Any(um => um.IdUsuario == idUsuario));
+
+
                 }
 
                 mascotas = await mascotasQuery.PaginationAsyncX<Mascota, MascotaDTO>(start, lenght, _mapper);
-
             }
             catch (Exception ex)
             {
+                _logger.LogError("Consultar mascotas", ex.Message);
                 throw new VeterinariaYaraException(ex.Message);
             }
             return mascotas;
         }
-        public async Task<MascotaDTO> ConsultarMascotaId(int idMascota)
+
+        public async Task<MascotaDTO> ConsultarMascotaId(Guid idMascota)
         {
             MascotaDTO result = new();
 
             try
             {
+                var searchData = await _dataContext.Mascotas.Where(x => x.IdMascota == idMascota).FirstOrDefaultAsync();
+                if (searchData == null)
+                {
+                    throw new VeterinariaYaraException("La mascota que estás buscando no existe");
+                }
 
+                result.Nombre = searchData.Nombre;
+                result.Edad = searchData.Edad;
             }
             catch (Exception ex)
             {
@@ -62,7 +84,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
             return result;
         }
-        public async Task<CrearResponse> CrearMascota(MascotaDTO mascotaParam)
+        public async Task<CrearResponse> CrearMascota(NuevaMascotaDto mascotaParam)
         {
             using (var transaction = _dataContext.Database.BeginTransaction())
             {
@@ -92,7 +114,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
             return response;
         }
-        public async Task<CrearResponse> EditarMascota(MascotaDTO mascotaParam)
+        public async Task<CrearResponse> EditarMascota(NuevaMascotaDto mascotaParam)
         {
             try
             {

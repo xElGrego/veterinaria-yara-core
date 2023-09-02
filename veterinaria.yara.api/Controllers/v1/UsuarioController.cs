@@ -18,9 +18,9 @@ namespace veterinaria.yara.api.Controllers.v1
         }
 
         /// <summary>
-        /// Genera la lista de las mascotas
+        /// Método donde el usuario realiza el login
         /// </summary>
-        ///<param name="prueba"> Prueba </param>
+        ///<param name="usuario"> Objeto que se debe enviar para logearse </param>
         [HttpPost]
         [Consumes("application/json")]
         [Produces("application/json")]

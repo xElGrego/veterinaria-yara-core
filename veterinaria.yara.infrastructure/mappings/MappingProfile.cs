@@ -10,19 +10,19 @@ namespace veterinaria.yara.infrastructure.mappings
         public MappingProfile()
         {
 
-            //CreateMap<MascotaDTO, Mascota>();
-            //CreateMap<Raza, RazaDto>();
+            CreateMap<Mascota, MascotaDTO>();
+            CreateMap<Raza, RazaDto>();
 
             CreateMap<MensajeDTO, Mensaje>();
 
-            CreateMap<MascotaDTO, Mascota>()
+            CreateMap<NuevaMascotaDto, Mascota>()
               .ForMember(x => x.IdMascota, d => d.MapFrom(model => Guid.NewGuid()))
               .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now))
               .ForMember(x => x.Estado, d => d.MapFrom(model => true));
 
-            CreateMap<RazaDto, Raza>()
-            .ForMember(x => x.IdRaza, d => d.MapFrom(model => Guid.NewGuid()))
-            .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now));
+            //CreateMap<RazaDto, Raza>()
+            //.ForMember(x => x.IdRaza, d => d.MapFrom(model => Guid.NewGuid()))
+            //.ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now));
 
 
             CreateMap<UsuarioDTO, Usuario>()

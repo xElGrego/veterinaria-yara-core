@@ -10,11 +10,11 @@ namespace veterinaria.yara.domain.DTOs.Paginador
 
     public class PaginationFilterResponse<T>
     {
-        public IList<T> data { set; get; }
+        public IList<T> consulta { set; get; }
         public PaginationModel pagination { get; set; }
         public PaginationFilterResponse()
         {
-            data = new List<T>();
+            consulta = new List<T>();
             pagination = new PaginationModel();
         }
     }

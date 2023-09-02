@@ -10,7 +10,6 @@ namespace veterinaria.yara.infrastructure.extentions
 {
     public static class ApplicationsExtentions
     {
-
         public static IApplicationBuilder ConfigureMetricServer(this IApplicationBuilder app)
         {
             app.UseMetricServer();
