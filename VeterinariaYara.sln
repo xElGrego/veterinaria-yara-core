@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{08072A0C-3F32-4F65-BF8B-73ADB22BC3A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "veterinaria.yara.api", "veterinaria.yara.api\veterinaria.yara.api.csproj", "{C347FDC7-929C-4EF9-BDA9-1F6E1B90F3D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "veterinaria.yara.application", "veterinaria.yara.application\veterinaria.yara.application.csproj", "{3512849E-3724-4583-B19F-2D93D37316ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "veterinaria.yara.domain", "veterinaria.yara.domain\veterinaria.yara.domain.csproj", "{CA908F23-648A-40B8-845D-66A79642ADBE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "veterinaria.yara.infrastructure", "veterinaria.yara.infrastructure\veterinaria.yara.infrastructure.csproj", "{AA074AAA-6745-459D-AF6D-BD974B8DB093}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Loggin", "Common.Loggin\Common.Loggin.csproj", "{5E674977-8D6A-4542-A19B-5033752FD10A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C347FDC7-929C-4EF9-BDA9-1F6E1B90F3D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C347FDC7-929C-4EF9-BDA9-1F6E1B90F3D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C347FDC7-929C-4EF9-BDA9-1F6E1B90F3D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C347FDC7-929C-4EF9-BDA9-1F6E1B90F3D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3512849E-3724-4583-B19F-2D93D37316ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3512849E-3724-4583-B19F-2D93D37316ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3512849E-3724-4583-B19F-2D93D37316ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3512849E-3724-4583-B19F-2D93D37316ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA908F23-648A-40B8-845D-66A79642ADBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA908F23-648A-40B8-845D-66A79642ADBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA908F23-648A-40B8-845D-66A79642ADBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA908F23-648A-40B8-845D-66A79642ADBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA074AAA-6745-459D-AF6D-BD974B8DB093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA074AAA-6745-459D-AF6D-BD974B8DB093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA074AAA-6745-459D-AF6D-BD974B8DB093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA074AAA-6745-459D-AF6D-BD974B8DB093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E674977-8D6A-4542-A19B-5033752FD10A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E674977-8D6A-4542-A19B-5033752FD10A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E674977-8D6A-4542-A19B-5033752FD10A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E674977-8D6A-4542-A19B-5033752FD10A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C347FDC7-929C-4EF9-BDA9-1F6E1B90F3D9} = {08072A0C-3F32-4F65-BF8B-73ADB22BC3A4}
+		{3512849E-3724-4583-B19F-2D93D37316ED} = {08072A0C-3F32-4F65-BF8B-73ADB22BC3A4}
+		{CA908F23-648A-40B8-845D-66A79642ADBE} = {08072A0C-3F32-4F65-BF8B-73ADB22BC3A4}
+		{AA074AAA-6745-459D-AF6D-BD974B8DB093} = {08072A0C-3F32-4F65-BF8B-73ADB22BC3A4}
+		{5E674977-8D6A-4542-A19B-5033752FD10A} = {08072A0C-3F32-4F65-BF8B-73ADB22BC3A4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26027C87-2C3E-4F3A-BA29-6598FE806898}
+	EndGlobalSection
+EndGlobal
