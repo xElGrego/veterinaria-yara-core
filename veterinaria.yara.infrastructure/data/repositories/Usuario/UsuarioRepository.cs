@@ -11,7 +11,7 @@ using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.application.models.exceptions;
 using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.entities;
-using veterinaria.yara.infrastructure.repositories;
+using veterinaria.yara.infrastructure.extentions;
 
 namespace veterinaria.yara.infrastructure.data.repositories
 {
@@ -36,25 +36,22 @@ namespace veterinaria.yara.infrastructure.data.repositories
             try
             {
 
-                var usuarioId = await _dataContext.Usuarios
-                    .Where(u => u.Correo == usuarioParam.Correo && u.Clave == usuarioParam.Clave)
-                    .Select(u => u.IdUsuario)
-                    .FirstOrDefaultAsync();
-
-
                 var res = await _dataContext.Usuarios
-                .Where(u => u.Correo == usuarioParam.Correo && u.Clave == usuarioParam.Clave)
-                .Select(u => new
-                {
-                    u.Nombres,
-                    u.Correo,
-                    u.Apellidos,
-                    Rol = _dataContext.Roles
-                        .Where(r => r.UsuarioRoles.Any(ur => ur.IdUsuario == usuarioId))
-                        .Select(r => r.NombreRol)
-                        .FirstOrDefault()
-                })
-                .FirstOrDefaultAsync();
+                     .Where(u => u.Correo == usuarioParam.Correo && u.Clave == usuarioParam.Clave)
+                     .Join(_dataContext.UsuarioRoles,
+                         usuario => usuario.IdUsuario,
+                         usuarioRol => usuarioRol.IdUsuario,
+                         (usuario, usuarioRol) => new
+                         {
+                             usuario.Nombres,
+                             usuario.Correo,
+                             usuario.Apellidos,
+                             Rol = _dataContext.Roles
+                                 .Where(r => r.IdRol == usuarioRol.IdRol)
+                                 .Select(r => r.NombreRol)
+                                 .FirstOrDefault()
+                         })
+                     .FirstOrDefaultAsync();
 
                 usuario.Correo = res.Correo;
                 usuario.Nombres = res.Nombres;

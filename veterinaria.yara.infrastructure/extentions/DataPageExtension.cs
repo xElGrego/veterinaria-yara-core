@@ -57,8 +57,7 @@ public static class DataPageExtension
     this IQueryable<T> query,
     int startRow,
     int limit,
-    IMapper _mapper,
-    CancellationToken cancellation
+    IMapper _mapper
     )
     {
         PaginationFilterResponse<T> paged = new PaginationFilterResponse<T>();

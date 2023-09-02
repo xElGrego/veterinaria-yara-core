@@ -9,7 +9,7 @@ using veterinaria.yara.application.models.exceptions;
 using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Paginador;
 using veterinaria.yara.domain.entities;
-using veterinaria.yara.infrastructure.repositories;
+using veterinaria.yara.infrastructure.extentions;
 
 
 namespace veterinaria.yara.infrastructure.data.repositories

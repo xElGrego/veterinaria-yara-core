@@ -8,7 +8,8 @@ using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Mascota;
 using veterinaria.yara.domain.DTOs.Paginador;
 using veterinaria.yara.domain.entities;
-using veterinaria.yara.infrastructure.repositories;
+using veterinaria.yara.infrastructure.extentions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace veterinaria.yara.infrastructure.data.repositories
 {
@@ -25,34 +26,55 @@ namespace veterinaria.yara.infrastructure.data.repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int lenght, Guid? idUsuario, CancellationToken cancellationToken)
+        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int lenght, Guid? idUsuarioParam, CancellationToken cancellationToken)
         {
             PaginationFilterResponse<MascotaDTO> mascotas = new();
 
             try
             {
-                IQueryable<Mascota> mascotasQuery = _dataContext.Mascotas.AsNoTracking().OrderBy(r => r.FechaIngreso);
 
-                if (idUsuario != Guid.Empty)
-                {
+                var res = await _dataContext.Mascotas
+                    .Where(m => m.Estado == true)
+                    .Join(_dataContext.UsuarioMascotas,
+                        mascota => mascota.IdMascota,
+                        usuarioMascota => usuarioMascota.IdMascota,
+                        (mascota, usuarioMascota) => new
+                        {
+                            usuarioMascota.IdUsuario,
+                            usuarioMascota.IdMascota,
+                            mascota.Nombre,
+                            mascota.Mote,
+                            mascota.Edad,
+                            mascota.Peso,
+                            mascota.IdRaza,
+                            mascota.Estado
+                        })
+                    .Where(result => result.IdUsuario == idUsuarioParam)
+                    .ToListAsync();
 
 
-                    mascotasQuery = mascotasQuery
-               .Join(
-                   _dataContext.UsuarioMascotas,
-                   mascota => mascota.IdMascota,
-                   usuarioMascota => usuarioMascota.IdMascota,
-                   (mascota, usuarioMascota) => new { Mascota = mascota, UsuarioMascota = usuarioMascota })
-               .Where(joinResult => joinResult.UsuarioMascota.IdUsuario == idUsuario)
-               .Select(joinResult => joinResult.Mascota);
+                //var res = await _dataContext.Mascotas
+                //                     .Where(m => m.Estado == true)
+                //                     .Join(_dataContext.UsuarioMascotas,
+                //                        usuario => usuario.IdUsuario,
+                //                        usuarioRol => usuarioRol.IdUsuario,
+                //                        (usuario, usuarioRol) => new
+                //                        {
+                //                            idUsuario,
+                //                            Mascota = _dataContext.Mascotas
+                //                                        .Where(m => m.IdMascota == usuario.IdMascota)
+                //                        })
+                //                    .FirstOrDefaultAsync();
 
 
-                    //mascotasQuery = mascotasQuery.Where(m => m.UsuarioMascota.Any(um => um.IdUsuario == idUsuario));
+                //IQueryable<Mascota> mascotasQuery = _dataContext.Mascotas.AsNoTracking().OrderBy(r => r.FechaIngreso);
 
+                //if (idUsuario == Guid.Empty)
+                //{
+                //    mascotasQuery = mascotasQuery.Where(m => m.UsuarioMascota.Any(um => um.IdUsuario == idUsuario));
+                //}
 
-                }
-
-                mascotas = await mascotasQuery.PaginationAsyncX<Mascota, MascotaDTO>(start, lenght, _mapper);
+                //mascotas = await mascotasQuery.PaginationAsyncX<Mascota, MascotaDTO>(start, lenght, _mapper);
             }
             catch (Exception ex)
             {
@@ -61,6 +83,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             }
             return mascotas;
         }
+
 
         public async Task<MascotaDTO> ConsultarMascotaId(Guid idMascota)
         {
