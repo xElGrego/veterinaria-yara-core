@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using veterinaria.yara.domain.entities;
 
-namespace veterinaria.yara.infrastructure.extentions
+namespace veterinaria.yara.infrastructure.data.repositories
 {
     public partial class DataContext : DbContext
     {

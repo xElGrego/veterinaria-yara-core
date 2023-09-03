@@ -8,7 +8,6 @@ using Serilog;
 using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.infrastructure.data.repositories;
 using veterinaria.yara.infrastructure.data.repositories.chat;
-using veterinaria.yara.infrastructure.extentions;
 using veterinaria.yara.infrastructure.mappings;
 
 namespace veterinaria.yara.infrastructure.ioc

@@ -4,7 +4,7 @@ using veterinaria.yara.domain.DTOs.Paginador;
 
 public static class DataPageExtension
 {
-    public static async Task<Paginador<T>> PaginateAsync<T>(
+    public static async Task<Paginador<T>> PaginateSearchAsync<T>(
         this IQueryable<T> query,
         string buscar,
         int pagina,
@@ -35,7 +35,7 @@ public static class DataPageExtension
     }
 
 
-    public static async Task<PaginationFilterResponse<T>> PaginationAsyncX<S, T>(
+    public static async Task<PaginationFilterResponse<T>> PaginationAsync<S, T>(
         this IQueryable<S> query,
         int startRow,
         int limit,
@@ -53,7 +53,7 @@ public static class DataPageExtension
         return paged;
     }
 
-    public static async Task<PaginationFilterResponse<T>> PaginationAsyncX<T>(
+    public static async Task<PaginationFilterResponse<T>> PaginationAsync<T>(
     this IQueryable<T> query,
     int startRow,
     int limit,

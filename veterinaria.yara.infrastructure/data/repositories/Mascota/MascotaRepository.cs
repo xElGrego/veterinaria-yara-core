@@ -8,7 +8,6 @@ using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Mascota;
 using veterinaria.yara.domain.DTOs.Paginador;
 using veterinaria.yara.domain.entities;
-using veterinaria.yara.infrastructure.extentions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace veterinaria.yara.infrastructure.data.repositories
@@ -26,55 +25,37 @@ namespace veterinaria.yara.infrastructure.data.repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int lenght, Guid? idUsuarioParam, CancellationToken cancellationToken)
+        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, Guid? idUsuarioParam, CancellationToken cancellationToken)
         {
             PaginationFilterResponse<MascotaDTO> mascotas = new();
 
             try
             {
+                var mascotasQuery = _dataContext.Mascotas
+                 .Where(m => m.Estado == true)
+                 .Join(_dataContext.UsuarioMascotas,
+                     mascota => mascota.IdMascota,
+                     usuarioMascota => usuarioMascota.IdMascota,
+                     (mascota, usuarioMascota) => new MascotaDTO
+                     {
+                         IdMascota = mascota.IdMascota,
+                         IdUsuario = usuarioMascota.IdUsuario,
+                         Nombre = mascota.Nombre,
+                         Mote = mascota.Mote,
+                         Edad = mascota.Edad,
+                         Peso = mascota.Peso,
+                         IdRaza = mascota.IdRaza,
+                         FechaIngreso = mascota.FechaIngreso,
+                         FechaModificacion = mascota.FechaModificacion,
+                         Estado = mascota.Estado
+                     });
 
-                var res = await _dataContext.Mascotas
-                    .Where(m => m.Estado == true)
-                    .Join(_dataContext.UsuarioMascotas,
-                        mascota => mascota.IdMascota,
-                        usuarioMascota => usuarioMascota.IdMascota,
-                        (mascota, usuarioMascota) => new
-                        {
-                            usuarioMascota.IdUsuario,
-                            usuarioMascota.IdMascota,
-                            mascota.Nombre,
-                            mascota.Mote,
-                            mascota.Edad,
-                            mascota.Peso,
-                            mascota.IdRaza,
-                            mascota.Estado
-                        })
-                    .Where(result => result.IdUsuario == idUsuarioParam)
-                    .ToListAsync();
+                if (idUsuarioParam != Guid.Empty)
+                {
+                    mascotasQuery = mascotasQuery.Where(mascota => mascota.IdUsuario == idUsuarioParam);
+                }
 
-
-                //var res = await _dataContext.Mascotas
-                //                     .Where(m => m.Estado == true)
-                //                     .Join(_dataContext.UsuarioMascotas,
-                //                        usuario => usuario.IdUsuario,
-                //                        usuarioRol => usuarioRol.IdUsuario,
-                //                        (usuario, usuarioRol) => new
-                //                        {
-                //                            idUsuario,
-                //                            Mascota = _dataContext.Mascotas
-                //                                        .Where(m => m.IdMascota == usuario.IdMascota)
-                //                        })
-                //                    .FirstOrDefaultAsync();
-
-
-                //IQueryable<Mascota> mascotasQuery = _dataContext.Mascotas.AsNoTracking().OrderBy(r => r.FechaIngreso);
-
-                //if (idUsuario == Guid.Empty)
-                //{
-                //    mascotasQuery = mascotasQuery.Where(m => m.UsuarioMascota.Any(um => um.IdUsuario == idUsuario));
-                //}
-
-                //mascotas = await mascotasQuery.PaginationAsyncX<Mascota, MascotaDTO>(start, lenght, _mapper);
+                mascotas = await mascotasQuery.PaginationAsync(start, length, _mapper);
             }
             catch (Exception ex)
             {
