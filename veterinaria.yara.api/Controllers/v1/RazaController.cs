@@ -5,7 +5,6 @@ using veterinaria.yara.application.models.dtos;
 using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Paginador;
 using veterinaria.yara.domain.DTOs.Raza;
-using veterinaria.yara.domain.entities;
 
 namespace veterinaria.yara.api.Controllers.v1
 {

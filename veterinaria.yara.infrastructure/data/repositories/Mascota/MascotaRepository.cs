@@ -64,7 +64,6 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return mascotas;
         }
 
-
         public async Task<MascotaDTO> ConsultarMascotaId(Guid idMascota)
         {
             MascotaDTO result = new();
@@ -87,6 +86,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
             return result;
         }
+
         public async Task<CrearResponse> CrearMascota(NuevaMascotaDto mascotaParam)
         {
             using (var transaction = _dataContext.Database.BeginTransaction())
@@ -118,7 +118,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return response;
         }
 
-        public async Task<CrearResponse> EditarMascota(EditarMascotaDTO mascotaParam)
+        public async Task<CrearResponse> EditarMascota(MascotaDTO mascotaParam)
         {
             try
             {

@@ -9,7 +9,7 @@ namespace veterinaria.yara.application.interfaces.repositories
         Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int skip, int take, Guid? idUsuario, CancellationToken cancellationToken);
         Task<MascotaDTO> ConsultarMascotaId(Guid idMascota);
         Task<CrearResponse> CrearMascota(NuevaMascotaDto mascota);
-        Task<CrearResponse> EditarMascota(EditarMascotaDTO mascota);
+        Task<CrearResponse> EditarMascota(MascotaDTO mascota);
         Task<CrearResponse> EliminarMascota(Guid idMascota);
     }
 }

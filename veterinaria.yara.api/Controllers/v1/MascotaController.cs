@@ -67,7 +67,7 @@ namespace veterinaria.yara.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/editar-mascota")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> EditarMascota([FromBody][Required] EditarMascotaDTO mascota)
+        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> EditarMascota([FromBody][Required] MascotaDTO mascota)
         {
             var response = await _mascotaRepository.EditarMascota(mascota);
             return Ok(new MsDtoResponse<CrearResponse>(response));

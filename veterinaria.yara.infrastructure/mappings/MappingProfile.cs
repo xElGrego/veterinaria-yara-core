@@ -11,11 +11,7 @@ namespace veterinaria.yara.infrastructure.mappings
         public MappingProfile()
         {
 
-            CreateMap<Mascota, MascotaDTO>();
-            CreateMap<EditarMascotaDTO, Mascota>();
-
-
-
+            CreateMap<Mascota, MascotaDTO>().ReverseMap();
             CreateMap<NuevaMascotaDto, Mascota>()
               .ForMember(x => x.IdMascota, d => d.MapFrom(model => Guid.NewGuid()))
               .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now))
@@ -23,7 +19,6 @@ namespace veterinaria.yara.infrastructure.mappings
 
 
             CreateMap<Raza, RazaDTO>().ReverseMap();
-
             CreateMap<NuevaRazaDTO, Raza>()
             .ForMember(x => x.IdRaza, d => d.MapFrom(model => Guid.NewGuid()))
             .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now));
