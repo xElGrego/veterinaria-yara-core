@@ -8,7 +8,6 @@ using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Mascota;
 using veterinaria.yara.domain.DTOs.Paginador;
 using veterinaria.yara.domain.entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace veterinaria.yara.infrastructure.data.repositories
 {
@@ -118,22 +117,24 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
             return response;
         }
-        public async Task<CrearResponse> EditarMascota(NuevaMascotaDto mascotaParam)
+
+        public async Task<CrearResponse> EditarMascota(EditarMascotaDTO mascotaParam)
         {
             try
             {
-                var searchData = await _dataContext.Mascotas.Where(x => x.IdMascota == mascotaParam.IdMascota).FirstOrDefaultAsync();
-                if (searchData == null)
+                var mascota = await _dataContext.Mascotas.FindAsync(mascotaParam.IdMascota);
+
+                if (mascota == null)
                 {
-                    throw new VeterinariaYaraException("La raza que estás buscando no existe");
+                    throw new VeterinariaYaraException("La mascota que estás buscando no existe");
                 }
 
-                var mascota = _mapper.Map<Mascota>(mascotaParam);
+                _mapper.Map(mascotaParam, mascota);
                 mascota.FechaModificacion = DateTime.Now;
+
                 _dataContext.Mascotas.Update(mascota);
                 await _dataContext.SaveChangesAsync();
             }
-
             catch (Exception ex)
             {
                 _logger.LogError("Editar mascota [" + JsonConvert.SerializeObject(mascotaParam) + "]", ex);
@@ -147,6 +148,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
             return response;
         }
+
+
+
         public async Task<CrearResponse> EliminarMascota(Guid idMascota)
         {
             try

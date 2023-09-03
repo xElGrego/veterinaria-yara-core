@@ -4,6 +4,7 @@ using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.application.models.dtos;
 using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Paginador;
+using veterinaria.yara.domain.DTOs.Raza;
 using veterinaria.yara.domain.entities;
 
 namespace veterinaria.yara.api.Controllers.v1
@@ -29,27 +30,27 @@ namespace veterinaria.yara.api.Controllers.v1
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(MsDtoResponse<PaginationFilterResponse<RazaDto>>), 200)]
+        [ProducesResponseType(typeof(MsDtoResponse<PaginationFilterResponse<RazaDTO>>), 200)]
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/consulta-razas")]
-        public async Task<ActionResult<MsDtoResponse<PaginationFilterResponse<RazaDto>>>> ConsultaRazas(string buscar, int start, int lenght)
+        public async Task<ActionResult<MsDtoResponse<PaginationFilterResponse<RazaDTO>>>> ConsultaRazas(string buscar, int start, int lenght)
         {
             var response = await _razaRepository.ConsultarRazas(buscar, start, lenght);
-            return Ok(new MsDtoResponse<PaginationFilterResponse<RazaDto>>(response));
+            return Ok(new MsDtoResponse<PaginationFilterResponse<RazaDTO>>(response));
         }
 
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(MsDtoResponse<RazaDto>), 200)]
+        [ProducesResponseType(typeof(MsDtoResponse<RazaDTO>), 200)]
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/consulta-razas-id")]
-        public async Task<ActionResult<List<MsDtoResponse<List<RazaDto>>>>> ConsultaRazasId(Guid idRaza)
+        public async Task<ActionResult<MsDtoResponse<RazaDTO>>> ConsultaRazasId(Guid idRaza)
         {
             var response = await _razaRepository.ConsultarRazaId(idRaza);
-            return Ok(new MsDtoResponse<RazaDto>(response));
+            return Ok(new MsDtoResponse<RazaDTO>(response));
         }
 
         [HttpPost]
@@ -59,7 +60,7 @@ namespace veterinaria.yara.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/crear-raza")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> CrearRaza([FromBody][Required] RazaDto raza)
+        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> CrearRaza([FromBody][Required] NuevaRazaDTO raza)
         {
             var response = await _razaRepository.CrearRaza(raza);
             return Ok(new MsDtoResponse<CrearResponse>(response));
@@ -73,7 +74,7 @@ namespace veterinaria.yara.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/editar-raza")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> EditarRaza([FromBody][Required] RazaDto raza)
+        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> EditarRaza([FromBody][Required] RazaDTO raza)
         {
             var response = await _razaRepository.EditarRaza(raza);
             return Ok(new MsDtoResponse<CrearResponse>(response));

@@ -1,6 +1,7 @@
 using AutoMapper;
 using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Mascota;
+using veterinaria.yara.domain.DTOs.Raza;
 using veterinaria.yara.domain.entities;
 
 namespace veterinaria.yara.infrastructure.mappings
@@ -11,18 +12,21 @@ namespace veterinaria.yara.infrastructure.mappings
         {
 
             CreateMap<Mascota, MascotaDTO>();
-            CreateMap<Raza, RazaDto>();
+            CreateMap<EditarMascotaDTO, Mascota>();
 
-            CreateMap<MensajeDTO, Mensaje>();
+
 
             CreateMap<NuevaMascotaDto, Mascota>()
               .ForMember(x => x.IdMascota, d => d.MapFrom(model => Guid.NewGuid()))
               .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now))
               .ForMember(x => x.Estado, d => d.MapFrom(model => true));
 
-            //CreateMap<RazaDto, Raza>()
-            //.ForMember(x => x.IdRaza, d => d.MapFrom(model => Guid.NewGuid()))
-            //.ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now));
+
+            CreateMap<Raza, RazaDTO>().ReverseMap();
+
+            CreateMap<NuevaRazaDTO, Raza>()
+            .ForMember(x => x.IdRaza, d => d.MapFrom(model => Guid.NewGuid()))
+            .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now));
 
 
             CreateMap<UsuarioDTO, Usuario>()
@@ -30,6 +34,9 @@ namespace veterinaria.yara.infrastructure.mappings
             .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now))
             .ForMember(x => x.Clave, d => d.MapFrom(model => model.Clave))
             .ForMember(x => x.Estado, d => d.MapFrom(model => true));
+
+            CreateMap<MensajeDTO, Mensaje>();
+
 
         }
     }

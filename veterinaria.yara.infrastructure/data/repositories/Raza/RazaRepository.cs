@@ -8,6 +8,7 @@ using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.application.models.exceptions;
 using veterinaria.yara.domain.DTOs;
 using veterinaria.yara.domain.DTOs.Paginador;
+using veterinaria.yara.domain.DTOs.Raza;
 using veterinaria.yara.domain.entities;
 
 
@@ -28,14 +29,14 @@ namespace veterinaria.yara.infrastructure.data.repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PaginationFilterResponse<RazaDto>> ConsultarRazas(string buscar, int start, int lenght)
+        public async Task<PaginationFilterResponse<RazaDTO>> ConsultarRazas(string buscar, int start, int lenght)
         {
-            PaginationFilterResponse<RazaDto> razas = new();
+            PaginationFilterResponse<RazaDTO> razas = new();
 
             try
             {
                 razas = await _dataContext.Razas.AsNoTracking().OrderBy(r => r.FechaIngreso)
-                    .PaginationAsync<Raza, RazaDto>(start, lenght, _mapper);
+                    .PaginationAsync<Raza, RazaDTO>(start, lenght, _mapper);
             }
             catch (Exception ex)
             {
@@ -45,9 +46,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return razas;
         }
 
-        public async Task<RazaDto> ConsultarRazaId(Guid idRaza)
+        public async Task<RazaDTO> ConsultarRazaId(Guid idRaza)
         {
-            RazaDto result = new();
+            RazaDTO result = new();
 
             try
             {
@@ -70,7 +71,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
         }
 
 
-        public async Task<CrearResponse> CrearRaza(RazaDto razaParam)
+        public async Task<CrearResponse> CrearRaza(NuevaRazaDTO razaParam)
         {
             try
             {
@@ -92,24 +93,26 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return response;
         }
 
-        public async Task<CrearResponse> EditarRaza(RazaDto raza)
+        public async Task<CrearResponse> EditarRaza(RazaDTO razaParam)
         {
             try
             {
-                var searchData = await _dataContext.Razas.Where(X => X.IdRaza == raza.IdRaza).FirstOrDefaultAsync();
-                if (searchData == null)
+                var raza = await _dataContext.Razas.FindAsync(razaParam.IdRaza);
+
+                if (raza == null)
                 {
                     throw new VeterinariaYaraException("La raza que estás buscando no existe");
                 }
 
-                var mapper = _mapper.Map<Raza>(raza);
-                mapper.FechaModificacion = DateTime.Now;
-                _dataContext.Update(mapper);
+                _mapper.Map(razaParam, raza);
+                raza.FechaModificacion = DateTime.Now;
+
+                _dataContext.Razas.Update(raza);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Editar raza [" + JsonConvert.SerializeObject(raza) + "]", ex);
+                _logger.LogError("Editar raza [" + JsonConvert.SerializeObject(razaParam) + "]", ex);
                 throw new VeterinariaYaraException(ex.Message);
             }
 

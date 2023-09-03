@@ -1,7 +1,6 @@
-
-namespace veterinaria.yara.domain.DTOs
+namespace veterinaria.yara.domain.DTOs.Raza
 {
-    public class RazaDto
+    public class NuevaRazaDTO
     {
         public Guid IdRaza { get; set; }
         public string? Nombre { get; set; }
