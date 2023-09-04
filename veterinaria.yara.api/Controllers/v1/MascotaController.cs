@@ -91,5 +91,23 @@ namespace veterinaria.yara.api.Controllers.v1
             return Ok(new MsDtoResponse<CrearResponse>(response));
         }
 
+
+        /// <summary>
+        /// Método para obtener la ultima mascota registrada
+        /// </summary>
+        /// <param name="IdUsuario"> Id del usuario a buscar </param>
+        [HttpGet]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(MsDtoResponse<CrearResponse>), 200)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 400)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 500)]
+        [Route("/v1/veterinaria-yara/ultima-mascota")]
+        public async Task<ActionResult<MsDtoResponse<MascotaDTO>>> ObtenerUltimaMascota([FromHeader][Required] Guid IdUsuario)
+        {
+            var response = await _mascotaRepository.UltimaMascota(IdUsuario);
+            return Ok(new MsDtoResponse<MascotaDTO>(response));
+        }
+
     }
 }

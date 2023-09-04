@@ -149,8 +149,6 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return response;
         }
 
-
-
         public async Task<CrearResponse> EliminarMascota(Guid idMascota)
         {
             try
@@ -182,30 +180,58 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return response;
         }
 
-        //public async Task<CrearResponse> EliminarMascota(Guid idMascota)
-        //{
-        //    try
-        //    {
-        //        var entidadAEliminar = _dataContext.Mascotas.Find(idMascota);
+        public async Task<MascotaDTO> UltimaMascota(Guid idUsuarioParam)
+        {
+            MascotaDTO result = new();
 
-        //        if (entidadAEliminar != null)
-        //        {
-        //            _dataContext.Mascotas.Remove(entidadAEliminar);
-        //            _dataContext.SaveChanges();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError("Eliminar Mascota [" + JsonConvert.SerializeObject(idMascota) + "]", ex);
-        //        throw new VeterinariaYaraException("Error no se logró borrar", ex.Message);
-        //    }
+            try
+            {
+                var idUsuario = _dataContext.Usuarios
+                    .Where(x => x.Estado == true)
+                    .Select(x => x.IdUsuario)
+                    .FirstOrDefault();
 
-        //    var response = new CrearResponse
-        //    {
-        //        Response = "La mascota fue eliminada con éxito"
-        //    };
 
-        //    return response;
-        //}
+                if (idUsuario == null)
+                {
+                    throw new VeterinariaYaraException("El usuario no existe");
+                }
+
+                var ultimaMascota = await _dataContext.Mascotas
+                    .Where(m => m.Estado == true)
+                    .Join(_dataContext.UsuarioMascotas,
+                        mascota => mascota.IdMascota,
+                        usuarioMascota => usuarioMascota.IdMascota,
+                        (mascota, usuarioMascota) => new MascotaDTO
+                        {
+                            IdMascota = mascota.IdMascota,
+                            IdUsuario = usuarioMascota.IdUsuario,
+                            Nombre = mascota.Nombre,
+                            Mote = mascota.Mote,
+                            Edad = mascota.Edad,
+                            Peso = mascota.Peso,
+                            IdRaza = mascota.IdRaza,
+                            FechaIngreso = mascota.FechaIngreso,
+                            FechaModificacion = mascota.FechaModificacion,
+                            Estado = mascota.Estado
+                        })
+                    .Where(mascota => mascota.IdUsuario == idUsuario)
+                    .OrderByDescending(mascota => mascota.IdMascota)
+                    .ThenByDescending(m => m.IdMascota)
+                    .FirstOrDefaultAsync();
+
+                if (ultimaMascota != null)
+                {
+                    result = ultimaMascota;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError("Ultima mascota [" + JsonConvert.SerializeObject(idUsuarioParam) + "]", ex);
+                throw new VeterinariaYaraException(ex.Message);
+            }
+            return result;
+        }
     }
 }
