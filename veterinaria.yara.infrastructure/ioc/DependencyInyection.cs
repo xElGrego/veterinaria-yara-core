@@ -8,6 +8,7 @@ using Serilog;
 using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.infrastructure.data.repositories;
 using veterinaria.yara.infrastructure.data.repositories.chat;
+using veterinaria.yara.infrastructure.data.repositories.notificaciones;
 using veterinaria.yara.infrastructure.mappings;
 
 namespace veterinaria.yara.infrastructure.ioc
@@ -16,13 +17,14 @@ namespace veterinaria.yara.infrastructure.ioc
     {
         public static IServiceCollection AddInfraestructure(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddLogging(loginBuilder => loginBuilder.AddSerilog(dispose: true));
 
             services.AddScoped<IRaza, RazaRestRepository>();
             services.AddScoped<IMascota, MascotaRestRepository>();
             services.AddScoped<IUsuario, UsuarioRepository>();
             services.AddScoped<IChat, Chat>();
+            services.AddScoped<INotificaciones, INotificacionesRepository>();
+
 
             var builderConnection = new SqlConnectionStringBuilder(configuration.GetConnectionString("DefaultConnection"));
             builderConnection.Password = "yara19975";
@@ -35,7 +37,6 @@ namespace veterinaria.yara.infrastructure.ioc
 
             services.AddAutoMapper(cfg => cfg.Internal().MethodMappingEnabled = false, typeof(MappingProfile).Assembly);
 
-            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddDbContext<DataContext>(options =>
             {
