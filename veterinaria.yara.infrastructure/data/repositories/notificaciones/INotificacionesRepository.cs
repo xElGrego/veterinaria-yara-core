@@ -14,7 +14,7 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                 var factory = new ConnectionFactory
                 {
                     HostName = "localhost",
-                    UserName = "grego",
+                    UserName = "grego977",
                     Password = "yara19975"
                 };
 
@@ -42,7 +42,7 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                 var factory = new ConnectionFactory
                 {
                     HostName = "localhost",
-                    UserName = "grego",
+                    UserName = "grego977",
                     Password = "yara19975"
                 };
 

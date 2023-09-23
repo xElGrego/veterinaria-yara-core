@@ -23,8 +23,8 @@ namespace veterinaria.yara.api.Controllers.v1
         /// <summary>
         /// Genera la lista de razas paginadas
         /// </summary>
-        /// <param name="skip"> Número de páginan dodne se requiere empezar la consulta </param>
-        /// <param name="take"> Cantidad de items que se requiere obtener </param>
+        /// <param name="start"> Número de páginan dodne se requiere empezar la consulta </param>
+        /// <param name="lenght"> Cantidad de items que se requiere obtener </param>
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
