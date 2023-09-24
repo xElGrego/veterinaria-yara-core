@@ -6,7 +6,7 @@ namespace veterinaria.yara.application.interfaces.repositories
 {
     public interface IMascota
     {
-        Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int skip, int take, int estado, Guid? idUsuario, CancellationToken cancellationToken);
+        Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, int estado, DateTime fechaInicio, DateTime fechaFin, Guid? idUsuario, CancellationToken cancellationToken);
         Task<MascotaDTO> ConsultarMascotaId(Guid idMascota);
         Task<CrearResponse> CrearMascota(NuevaMascotaDto mascota);
         Task<CrearResponse> EditarMascota(MascotaDTO mascota);

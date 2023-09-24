@@ -24,29 +24,32 @@ namespace veterinaria.yara.infrastructure.data.repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, int estado, Guid? idUsuarioParam, CancellationToken cancellationToken)
+        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, int estado, DateTime fechaInicio, DateTime fechaFin, Guid? idUsuarioParam, CancellationToken cancellationToken)
         {
             PaginationFilterResponse<MascotaDTO> mascotas = new();
 
             try
             {
+                fechaInicio = fechaInicio.Date; // Establecer la hora de inicio a las 00:00:00
+                fechaFin = fechaFin.Date.AddHours(23).AddMinutes(59).AddSeconds(59); // Establecer la hora de fin a las 23:59:59
+
                 var mascotasQuery = _dataContext.Mascotas
-                 .Join(_dataContext.UsuarioMascotas,
-                     mascota => mascota.IdMascota,
-                     usuarioMascota => usuarioMascota.IdMascota,
-                     (mascota, usuarioMascota) => new MascotaDTO
-                     {
-                         IdMascota = mascota.IdMascota,
-                         IdUsuario = usuarioMascota.IdUsuario,
-                         Nombre = mascota.Nombre,
-                         Mote = mascota.Mote,
-                         Edad = mascota.Edad,
-                         Peso = mascota.Peso,
-                         IdRaza = mascota.IdRaza,
-                         FechaIngreso = mascota.FechaIngreso,
-                         FechaModificacion = mascota.FechaModificacion,
-                         Estado = mascota.Estado
-                     });
+                    .Join(_dataContext.UsuarioMascotas,
+                        mascota => mascota.IdMascota,
+                        usuarioMascota => usuarioMascota.IdMascota,
+                        (mascota, usuarioMascota) => new MascotaDTO
+                        {
+                            IdMascota = mascota.IdMascota,
+                            IdUsuario = usuarioMascota.IdUsuario,
+                            Nombre = mascota.Nombre,
+                            Mote = mascota.Mote,
+                            Edad = mascota.Edad,
+                            Peso = mascota.Peso,
+                            IdRaza = mascota.IdRaza,
+                            FechaIngreso = mascota.FechaIngreso,
+                            FechaModificacion = mascota.FechaModificacion,
+                            Estado = mascota.Estado
+                        });
 
                 if (idUsuarioParam != Guid.Empty)
                 {
@@ -58,6 +61,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     mascotasQuery = mascotasQuery.Where(mascota => mascota.Estado == estado);
                 }
 
+                mascotasQuery = mascotasQuery
+                    .Where(mascota => mascota.FechaIngreso >= fechaInicio && mascota.FechaIngreso <= fechaFin);
+
                 mascotas = await mascotasQuery.PaginationAsync(start, length, _mapper);
             }
             catch (Exception ex)
@@ -67,6 +73,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             }
             return mascotas;
         }
+
 
         public async Task<MascotaDTO> ConsultarMascotaId(Guid idMascota)
         {
@@ -237,5 +244,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             }
             return result;
         }
+
+
     }
 }
