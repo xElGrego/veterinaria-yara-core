@@ -52,7 +52,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
             try
             {
-                var searchData = await _dataContext.Razas.Where(X => X.IdRaza == idRaza).FirstOrDefaultAsync();
+                var searchData = await _dataContext.Razas.Where(x => x.IdRaza == idRaza).FirstOrDefaultAsync();
                 if (searchData == null)
                 {
                     throw new VeterinariaYaraException("La raza que estás buscando no existe");

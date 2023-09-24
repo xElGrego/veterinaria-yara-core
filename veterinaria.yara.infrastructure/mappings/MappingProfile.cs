@@ -1,5 +1,6 @@
 using AutoMapper;
 using veterinaria.yara.domain.DTOs;
+using veterinaria.yara.domain.DTOs.Estados;
 using veterinaria.yara.domain.DTOs.Mascota;
 using veterinaria.yara.domain.DTOs.Raza;
 using veterinaria.yara.domain.entities;
@@ -31,6 +32,8 @@ namespace veterinaria.yara.infrastructure.mappings
             .ForMember(x => x.Estado, d => d.MapFrom(model => true));
 
             CreateMap<MensajeDTO, Mensaje>();
+            CreateMap<Estado, EstadosDTO>().ReverseMap();
+
 
 
         }

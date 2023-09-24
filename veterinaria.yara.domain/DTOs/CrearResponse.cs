@@ -1,4 +1,4 @@
-﻿namespace veterinaria.yara.domain.DTOs
+namespace veterinaria.yara.domain.DTOs
 {
     public partial class CrearResponse
     {

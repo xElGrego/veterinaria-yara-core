@@ -11,6 +11,6 @@ namespace veterinaria.yara.domain.DTOs.Mascota
         public Guid? IdRaza { get; set; }
         public DateTime? FechaIngreso { get; set; }
         public DateTime? FechaModificacion { get; set; }
-        public bool? Estado { get; set; }
+        public int? Estado { get; set; }
     }
 }

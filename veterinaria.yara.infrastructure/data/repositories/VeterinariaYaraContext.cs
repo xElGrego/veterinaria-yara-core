@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using veterinaria.yara.domain.entities;
 
@@ -14,6 +15,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
         {
         }
 
+        public virtual DbSet<Estado> Estados { get; set; } = null!;
         public virtual DbSet<Mascota> Mascotas { get; set; } = null!;
         public virtual DbSet<Mensaje> Mensajes { get; set; } = null!;
         public virtual DbSet<Raza> Razas { get; set; } = null!;
@@ -24,6 +26,16 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Estado>(entity =>
+            {
+                entity.HasKey(e => e.IdEstado)
+                    .HasName("PK__Estados__FBB0EDC178D786E5");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Mascota>(entity =>
             {
                 entity.HasKey(e => e.IdMascota)
@@ -40,6 +52,11 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     .IsUnicode(false);
 
                 entity.Property(e => e.Peso).HasColumnType("decimal(5, 2)");
+
+                entity.HasOne(d => d.EstadoNavigation)
+                    .WithMany(p => p.Mascota)
+                    .HasForeignKey(d => d.Estado)
+                    .HasConstraintName("FK_Estados_IdEstado");
 
                 entity.HasOne(d => d.IdRazaNavigation)
                     .WithMany(p => p.Mascota)
@@ -110,6 +127,11 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 entity.Property(e => e.Nombres)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.EstadoNavigation)
+                    .WithMany(p => p.Usuarios)
+                    .HasForeignKey(d => d.Estado)
+                    .HasConstraintName("PK_Estados_IdEstado");
             });
 
             modelBuilder.Entity<UsuarioMascota>(entity =>
@@ -122,14 +144,12 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 entity.HasOne(d => d.IdMascotaNavigation)
                     .WithMany(p => p.UsuarioMascota)
                     .HasForeignKey(d => d.IdMascota)
-                    .HasConstraintName("FK__UsuarioMa__IdMas__4AB81AF0")
-                    .OnDelete(DeleteBehavior.Cascade); //BORRANDO EN CASCADA
+                    .HasConstraintName("FK__UsuarioMa__IdMas__4AB81AF0");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.UsuarioMascota)
                     .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK__UsuarioMa__IdUsu__49C3F6B7")
-                   .OnDelete(DeleteBehavior.Cascade); // Agrega esta línea para la eliminación en cascada                
+                    .HasConstraintName("FK__UsuarioMa__IdUsu__49C3F6B7");
             });
 
             modelBuilder.Entity<UsuarioRole>(entity =>

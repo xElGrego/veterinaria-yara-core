@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace veterinaria.yara.domain.entities
 {
     public partial class Mascota
@@ -15,8 +18,9 @@ namespace veterinaria.yara.domain.entities
         public Guid? IdRaza { get; set; }
         public DateTime? FechaIngreso { get; set; }
         public DateTime? FechaModificacion { get; set; }
-        public bool? Estado { get; set; }
+        public int? Estado { get; set; }
 
+        public virtual Estado? EstadoNavigation { get; set; }
         public virtual Raza? IdRazaNavigation { get; set; }
         public virtual ICollection<UsuarioMascota> UsuarioMascota { get; set; }
     }

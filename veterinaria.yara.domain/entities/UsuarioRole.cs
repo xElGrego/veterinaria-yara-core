@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace veterinaria.yara.domain.entities
 {
     public partial class UsuarioRole

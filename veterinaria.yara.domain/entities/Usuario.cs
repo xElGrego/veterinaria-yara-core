@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace veterinaria.yara.domain.entities
 {
     public partial class Usuario
@@ -17,7 +20,9 @@ namespace veterinaria.yara.domain.entities
         public DateTime? FechaIngreso { get; set; }
         public DateTime? FechaModificacion { get; set; }
         public string? Correo { get; set; }
-        public bool? Estado { get; set; }
+        public int? Estado { get; set; }
+
+        public virtual Estado? EstadoNavigation { get; set; }
         public virtual ICollection<Mensaje> MensajeDestinatarios { get; set; }
         public virtual ICollection<Mensaje> MensajeRemitentes { get; set; }
         public virtual ICollection<UsuarioMascota> UsuarioMascota { get; set; }

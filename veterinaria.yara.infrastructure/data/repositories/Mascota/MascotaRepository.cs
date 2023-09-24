@@ -31,7 +31,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             try
             {
                 var mascotasQuery = _dataContext.Mascotas
-                 .Where(m => m.Estado == true)
+                 .Where(m => m.Estado == 2)
                  .Join(_dataContext.UsuarioMascotas,
                      mascota => mascota.IdMascota,
                      usuarioMascota => usuarioMascota.IdMascota,
@@ -187,7 +187,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             try
             {
                 var idUsuario = _dataContext.Usuarios
-                    .Where(x => x.Estado == true)
+                    .Where(x => x.Estado == 2)
                     .Select(x => x.IdUsuario)
                     .FirstOrDefault();
 
@@ -198,7 +198,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 }
 
                 var ultimaMascota = await _dataContext.Mascotas
-                    .Where(m => m.Estado == true)
+                    .Where(m => m.Estado == 1)
                     .Join(_dataContext.UsuarioMascotas,
                         mascota => mascota.IdMascota,
                         usuarioMascota => usuarioMascota.IdMascota,
