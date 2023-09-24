@@ -202,7 +202,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 }
 
                 var ultimaMascota = await _dataContext.Mascotas
-                    .Where(m => m.Estado == 1)
+                    .Where(m => m.Estado == 2)
                     .Join(_dataContext.UsuarioMascotas,
                         mascota => mascota.IdMascota,
                         usuarioMascota => usuarioMascota.IdMascota,
