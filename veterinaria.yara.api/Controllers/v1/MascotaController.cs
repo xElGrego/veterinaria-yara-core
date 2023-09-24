@@ -32,9 +32,9 @@ namespace veterinaria.yara.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/consulta-mascotas")]
-        public async Task<ActionResult<PaginationFilterResponse<MascotaDTO>>> ConsultarMascotas(int start, Int16 lenght, Guid idUsuario, CancellationToken cancellationToken)
+        public async Task<ActionResult<PaginationFilterResponse<MascotaDTO>>> ConsultarMascotas(int start, Int16 lenght, int estado, Guid idUsuario, CancellationToken cancellationToken)
         {
-            var response = await _mascotaRepository.ConsultarMascotas(start, lenght, idUsuario, cancellationToken);
+            var response = await _mascotaRepository.ConsultarMascotas(start, lenght, estado, idUsuario, cancellationToken);
             return Ok(new MsDtoResponse<PaginationFilterResponse<MascotaDTO>>(response));
         }
 

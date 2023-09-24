@@ -24,14 +24,13 @@ namespace veterinaria.yara.infrastructure.data.repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, Guid? idUsuarioParam, CancellationToken cancellationToken)
+        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, int estado, Guid? idUsuarioParam, CancellationToken cancellationToken)
         {
             PaginationFilterResponse<MascotaDTO> mascotas = new();
 
             try
             {
                 var mascotasQuery = _dataContext.Mascotas
-                 .Where(m => m.Estado == 2)
                  .Join(_dataContext.UsuarioMascotas,
                      mascota => mascota.IdMascota,
                      usuarioMascota => usuarioMascota.IdMascota,
@@ -52,6 +51,11 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 if (idUsuarioParam != Guid.Empty)
                 {
                     mascotasQuery = mascotasQuery.Where(mascota => mascota.IdUsuario == idUsuarioParam);
+                }
+
+                if (estado != 1)
+                {
+                    mascotasQuery = mascotasQuery.Where(mascota => mascota.Estado == estado);
                 }
 
                 mascotas = await mascotasQuery.PaginationAsync(start, length, _mapper);
