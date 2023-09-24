@@ -52,10 +52,13 @@ namespace veterinaria.yara.infrastructure.data.repositories
                          })
                      .FirstOrDefaultAsync();
 
-                usuario.Correo = res.Correo;
-                usuario.Nombres = res.Nombres;
-                usuario.Apellidos = res.Apellidos;
-                usuario.Rol = res.Rol;
+                if (res != null)
+                {
+                    usuario.Correo = res.Correo;
+                    usuario.Nombres = res.Nombres;
+                    usuario.Apellidos = res.Apellidos;
+                    usuario.Rol = res.Rol;
+                }
                 return usuario;
             }
             catch (Exception ex)
