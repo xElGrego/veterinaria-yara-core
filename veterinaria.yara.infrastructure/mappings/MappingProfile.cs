@@ -16,12 +16,11 @@ namespace veterinaria.yara.infrastructure.mappings
             CreateMap<NuevaMascotaDto, Mascota>()
               .ForMember(x => x.IdMascota, d => d.MapFrom(model => Guid.NewGuid()))
               .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now))
-              .ForMember(x => x.Estado, d => d.MapFrom(model => true));
+              .ForMember(x => x.Estado, d => d.MapFrom(model => 2));
 
 
             CreateMap<Raza, RazaDTO>().ReverseMap();
             CreateMap<NuevaRazaDTO, Raza>()
-            .ForMember(x => x.IdRaza, d => d.MapFrom(model => Guid.NewGuid()))
             .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now));
 
 

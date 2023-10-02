@@ -82,7 +82,6 @@ namespace veterinaria.yara.infrastructure.extentions
                          code = _code,
                          message = _message,
                          error = true,
-
                      };
 
                      string sjon = JsonSerializer.Serialize(_response);

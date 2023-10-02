@@ -21,6 +21,24 @@ namespace veterinaria.yara.api.Controllers.v1
         }
 
         /// <summary>
+        /// Genera la lista de las razas
+        /// </summary>
+
+        [HttpGet]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(MsDtoResponse<List<RazaDTO>>), 200)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 400)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 500)]
+        [Route("/v1/veterinaria-yara/obtener-razas")]
+        public async Task<ActionResult<MsDtoResponse<List<RazaDTO>>>> ObtenerRazas()
+        {
+            var response = await _razaRepository.ObtenerRazas();
+            return Ok(new MsDtoResponse<List<RazaDTO>>(response));
+        }
+
+
+        /// <summary>
         /// Genera la lista de razas junto a su respectiva paginación
         /// </summary>
         /// <param name="buscar"> Palabra clave para buscar una raza en especifico </param>

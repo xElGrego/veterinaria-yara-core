@@ -1,4 +1,4 @@
-﻿namespace veterinaria.yara.application.models.dtos
+namespace veterinaria.yara.application.models.dtos
 {
     public class MsDtoResponse<T>
     {
@@ -9,7 +9,6 @@
 
         public MsDtoResponse(T data)
         {
-          
             this.data = data;
             code = 200;
             msgRetorno = "OK";

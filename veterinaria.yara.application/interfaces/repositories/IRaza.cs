@@ -6,6 +6,7 @@ namespace veterinaria.yara.application.interfaces.repositories
 {
     public interface IRaza
     {
+        Task<List<RazaDTO>> ObtenerRazas();
         Task<PaginationFilterResponse<RazaDTO>> ConsultarRazas(string buscar, int start, int lenght);
         Task<RazaDTO> ConsultarRazaId(Guid idRaza);
         Task<CrearResponse> CrearRaza(NuevaRazaDTO raza);

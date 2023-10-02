@@ -7,6 +7,7 @@ using System.Data;
 using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.application.models.exceptions;
 using veterinaria.yara.domain.DTOs;
+using veterinaria.yara.domain.DTOs.Estados;
 using veterinaria.yara.domain.DTOs.Paginador;
 using veterinaria.yara.domain.DTOs.Raza;
 using veterinaria.yara.domain.entities;
@@ -40,7 +41,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError("Consultar razas [" + JsonConvert.SerializeObject(buscar) + "]", ex.Message);
+                _logger.LogError("Consultar razas", ex.Message);
                 throw new VeterinariaYaraException(ex.Message);
             }
             return razas;
@@ -139,7 +140,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             catch (Exception ex)
             {
                 _logger.LogError("Eliminar raza [" + JsonConvert.SerializeObject(idRaza) + "]", ex);
-                throw new VeterinariaYaraException("Error no se logró borrar", ex.Message);
+                throw new VeterinariaYaraException("Error, existen mascotas asociadas a esta raza.", ex.Message);
             }
 
             var response = new CrearResponse
@@ -147,6 +148,28 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 Response = "La raza fue eliminada con éxito"
             };
             return response;
+        }
+
+        public async Task<List<RazaDTO>> ObtenerRazas()
+        {
+            List<RazaDTO> result = new();
+
+            try
+            {
+                var searchData = await _dataContext.Razas.ToListAsync();
+                if (searchData == null)
+                {
+                    throw new VeterinariaYaraException("No existen estados en la tabla");
+                }
+                result = _mapper.Map<List<RazaDTO>>(searchData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error obtener razas", ex);
+                throw new VeterinariaYaraException(ex.Message);
+            }
+
+            return result;
         }
 
 

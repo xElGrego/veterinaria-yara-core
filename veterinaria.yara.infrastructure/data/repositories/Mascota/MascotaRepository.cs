@@ -30,8 +30,8 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
             try
             {
-                fechaInicio = fechaInicio.Date; // Establecer la hora de inicio a las 00:00:00
-                fechaFin = fechaFin.Date.AddHours(23).AddMinutes(59).AddSeconds(59); // Establecer la hora de fin a las 23:59:59
+                fechaInicio = fechaInicio.Date;
+                fechaFin = fechaFin.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
 
                 var mascotasQuery = _dataContext.Mascotas
                     .Join(_dataContext.UsuarioMascotas,
@@ -62,7 +62,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 }
 
                 mascotasQuery = mascotasQuery
-                    .Where(mascota => mascota.FechaIngreso >= fechaInicio && mascota.FechaIngreso <= fechaFin);
+                    .Where(mascota => mascota.FechaIngreso >= fechaInicio && mascota.FechaIngreso <= fechaFin).OrderBy(mascota => mascota.FechaIngreso);
 
                 mascotas = await mascotasQuery.PaginationAsync(start, length, _mapper);
             }
@@ -111,7 +111,6 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     _dataContext.UsuarioMascotas.Add(new UsuarioMascota { IdUsuarioMascota = Guid.NewGuid(), IdUsuario = mascotaParam.IdUsuario, IdMascota = mascota.IdMascota });
                     await _dataContext.SaveChangesAsync();
 
-
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -121,6 +120,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     throw new VeterinariaYaraException(ex.Message);
                 }
             }
+
             var response = new CrearResponse
             {
                 Response = "La mascota fue creada con éxito"
@@ -169,7 +169,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
                 if (entidadAEliminar != null)
                 {
-                    _dataContext.Mascotas.Remove(entidadAEliminar);
+                    entidadAEliminar.Estado = 3;
                     await _dataContext.SaveChangesAsync();
                 }
                 else
