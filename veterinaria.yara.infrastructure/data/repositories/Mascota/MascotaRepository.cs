@@ -24,7 +24,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, int estado, DateTime fechaInicio, DateTime fechaFin, Guid? idUsuarioParam, CancellationToken cancellationToken)
+        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotas(int start, int length, string nombre, int estado, DateTime fechaInicio, DateTime fechaFin, Guid? idUsuarioParam, CancellationToken cancellationToken)
         {
             PaginationFilterResponse<MascotaDTO> mascotas = new();
 
@@ -61,6 +61,11 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     mascotasQuery = mascotasQuery.Where(mascota => mascota.Estado == estado);
                 }
 
+                if (!string.IsNullOrEmpty(nombre))
+                {
+                    mascotasQuery = mascotasQuery.Where(mascota => mascota.Nombre.Contains(nombre));
+                }
+
                 mascotasQuery = mascotasQuery
                     .Where(mascota => mascota.FechaIngreso >= fechaInicio && mascota.FechaIngreso <= fechaFin).OrderBy(mascota => mascota.FechaIngreso);
 
@@ -74,10 +79,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return mascotas;
         }
 
-
         public async Task<MascotaDTO> ConsultarMascotaId(Guid idMascota)
         {
-            MascotaDTO result = new();
+            var result = new MascotaDTO();
 
             try
             {
@@ -104,11 +108,32 @@ namespace veterinaria.yara.infrastructure.data.repositories
             {
                 try
                 {
+                    var ultimoOrden = await _dataContext.UsuarioMascotas
+                        .Where(um => um.IdUsuario == mascotaParam.IdUsuario)
+                        .Join(
+                            _dataContext.Mascotas,
+                            um => um.IdMascota,
+                            m => m.IdMascota,
+                            (um, m) => m.Orden
+                        )
+                        .OrderByDescending(orden => orden)
+                        .FirstOrDefaultAsync() ?? 0;
+
+
+                    var nuevoOrden = ultimoOrden + 1;
+
                     var mascota = _mapper.Map<Mascota>(mascotaParam);
+                    mascota.Orden = nuevoOrden;
+
                     _dataContext.Mascotas.Add(mascota);
                     await _dataContext.SaveChangesAsync();
 
-                    _dataContext.UsuarioMascotas.Add(new UsuarioMascota { IdUsuarioMascota = Guid.NewGuid(), IdUsuario = mascotaParam.IdUsuario, IdMascota = mascota.IdMascota });
+                    _dataContext.UsuarioMascotas.Add(new UsuarioMascota
+                    {
+                        IdUsuarioMascota = Guid.NewGuid(),
+                        IdUsuario = mascotaParam.IdUsuario,
+                        IdMascota = mascota.IdMascota
+                    });
                     await _dataContext.SaveChangesAsync();
 
                     transaction.Commit();
@@ -191,6 +216,35 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return response;
         }
 
+        public async Task<CrearResponse> ActivarMascota(Guid idMascota)
+        {
+            try
+            {
+                var entidadAEliminar = await _dataContext.Mascotas.Include(m => m.UsuarioMascota)
+                    .FirstOrDefaultAsync(m => m.IdMascota == idMascota);
+
+                if (entidadAEliminar == null)
+                {
+                    throw new VeterinariaYaraException("La mascota no existe");
+                }
+
+                entidadAEliminar.Estado = 2;
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Eliminar Mascota [" + JsonConvert.SerializeObject(idMascota) + "]", ex);
+                throw new VeterinariaYaraException("Error al activar a la mascota", ex.Message);
+            }
+
+            var response = new CrearResponse
+            {
+                Response = "La mascota fue activada con éxito"
+            };
+
+            return response;
+        }
+
         public async Task<MascotaDTO> UltimaMascota(Guid idUsuarioParam)
         {
             MascotaDTO result = new();
@@ -245,6 +299,44 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return result;
         }
 
+        public async Task<PaginationFilterResponse<MascotaDTO>> ConsultarMascotasUsuario(int start, int length, Guid idUsuario, CancellationToken cancellationToken)
+        {
 
+            PaginationFilterResponse<MascotaDTO> mascotas = new();
+
+            try
+            {
+                var mascotasQuery = _dataContext.Mascotas
+                    .Join(_dataContext.UsuarioMascotas,
+                        mascota => mascota.IdMascota,
+                        usuarioMascota => usuarioMascota.IdMascota,
+                        (mascota, usuarioMascota) => new MascotaDTO
+                        {
+                            IdMascota = mascota.IdMascota,
+                            IdUsuario = usuarioMascota.IdUsuario,
+                            Nombre = mascota.Nombre,
+                            Mote = mascota.Mote,
+                            Edad = mascota.Edad,
+                            Peso = mascota.Peso,
+                            IdRaza = mascota.IdRaza,
+                            FechaIngreso = mascota.FechaIngreso,
+                            FechaModificacion = mascota.FechaModificacion,
+                            Estado = mascota.Estado
+                        });
+
+                if (idUsuario != Guid.Empty)
+                {
+                    mascotasQuery = mascotasQuery.Where(mascota => mascota.IdUsuario == idUsuario);
+                }
+
+                mascotas = await mascotasQuery.PaginationAsync(start, length, _mapper);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Consultar mascotas", ex.Message);
+                throw new VeterinariaYaraException(ex.Message);
+            }
+            return mascotas;
+        }
     }
 }

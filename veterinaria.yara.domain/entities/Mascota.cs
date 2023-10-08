@@ -7,6 +7,7 @@ namespace veterinaria.yara.domain.entities
     {
         public Mascota()
         {
+            Historials = new HashSet<Historial>();
             UsuarioMascota = new HashSet<UsuarioMascota>();
         }
 
@@ -19,9 +20,14 @@ namespace veterinaria.yara.domain.entities
         public DateTime? FechaIngreso { get; set; }
         public DateTime? FechaModificacion { get; set; }
         public int? Estado { get; set; }
+        /// <summary>
+        /// Sirve para tener el orden de posicion en el front
+        /// </summary>
+        public int? Orden { get; set; }
 
         public virtual Estado? EstadoNavigation { get; set; }
         public virtual Raza? IdRazaNavigation { get; set; }
+        public virtual ICollection<Historial> Historials { get; set; }
         public virtual ICollection<UsuarioMascota> UsuarioMascota { get; set; }
     }
 }

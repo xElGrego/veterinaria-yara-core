@@ -10,6 +10,10 @@ using Newtonsoft.Json;
 using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.application.models.exceptions;
 using veterinaria.yara.domain.DTOs;
+using veterinaria.yara.domain.DTOs.Mascota;
+using veterinaria.yara.domain.DTOs.Paginador;
+using veterinaria.yara.domain.DTOs.Raza;
+using veterinaria.yara.domain.DTOs.Usuario;
 using veterinaria.yara.domain.entities;
 
 namespace veterinaria.yara.infrastructure.data.repositories
@@ -29,9 +33,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<UsuarioDTO> ObtenerRol(UsuarioLogeoDTO usuarioParam)
+        public async Task<NuevoUsuarioDTO> ObtenerRol(UsuarioLogeoDTO usuarioParam)
         {
-            var usuario = new UsuarioDTO();
+            var usuario = new NuevoUsuarioDTO();
             try
             {
 
@@ -45,10 +49,11 @@ namespace veterinaria.yara.infrastructure.data.repositories
                              usuario.Nombres,
                              usuario.Correo,
                              usuario.Apellidos,
-                             Rol = _dataContext.Roles
-                                 .Where(r => r.IdRol == usuarioRol.IdRol)
-                                 .Select(r => r.NombreRol)
-                                 .FirstOrDefault()
+                             usuario.IdUsuario,
+                             Rol = _dataContext.UsuarioRoles
+                             .Where(ur => ur.IdUsuario == usuario.IdUsuario)
+                             .Select(ur => ur.IdRolNavigation.NombreRol)
+                             .ToList()
                          })
                      .FirstOrDefaultAsync();
 
@@ -58,6 +63,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     usuario.Nombres = res.Nombres;
                     usuario.Apellidos = res.Apellidos;
                     usuario.Rol = res.Rol;
+                    usuario.IdUsuario = res.IdUsuario;
                 }
                 return usuario;
             }
@@ -68,9 +74,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
         }
 
 
-        public async Task<UsuarioDTO> Login(UsuarioLogeoDTO usuarioDTOParam)
+        public async Task<NuevoUsuarioDTO> Login(UsuarioLogeoDTO usuarioDTOParam)
         {
-            UsuarioDTO usuario;
+            NuevoUsuarioDTO usuario;
             string jwToken;
 
             try
@@ -89,9 +95,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 throw new VeterinariaYaraException(ex.Message);
             }
 
-            var usuarito = new UsuarioDTO
+            var usuarito = new NuevoUsuarioDTO
             {
-                Clave = usuario.Clave,
+                IdUsuario = usuario.IdUsuario,
                 Correo = usuario.Correo,
                 Apellidos = usuario.Apellidos,
                 Nombres = usuario.Nombres,
@@ -102,7 +108,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return usuarito;
         }
 
-        private string GenerarToken(UsuarioDTO usuario)
+        private string GenerarToken(NuevoUsuarioDTO usuario)
         {
             var claims = new[]
             {
@@ -124,7 +130,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return token;
         }
 
-        public async Task<CrearResponse> CrearUsuario(UsuarioDTO usuarioParam)
+        public async Task<CrearResponse> CrearUsuario(NuevoUsuarioDTO usuarioParam)
         {
             using (var transaction = _dataContext.Database.BeginTransaction())
             {
@@ -135,21 +141,23 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     _dataContext.Usuarios.Add(usuario);
                     await _dataContext.SaveChangesAsync();
 
-                    if (!string.IsNullOrEmpty(usuarioParam.Rol))
+                    foreach (var rolNombre in usuarioParam.Rol)
                     {
-                        var rolExistente = await _dataContext.Roles.FirstOrDefaultAsync(r => r.NombreRol == usuarioParam.Rol);
-
-                        if (rolExistente == null)
+                        if (!string.IsNullOrEmpty(rolNombre))
                         {
-                            rolExistente = new Role { IdRol = Guid.NewGuid(), NombreRol = usuarioParam.Rol };
-                            _dataContext.Roles.Add(rolExistente);
+                            var rolExistente = await _dataContext.Roles.FirstOrDefaultAsync(r => r.NombreRol == rolNombre);
+
+                            if (rolExistente == null)
+                            {
+                                rolExistente = new Role { IdRol = Guid.NewGuid(), NombreRol = rolNombre };
+                                _dataContext.Roles.Add(rolExistente);
+                                await _dataContext.SaveChangesAsync();
+                            }
+
+                            _dataContext.UsuarioRoles.Add(new UsuarioRole { IdUsuarioRol = Guid.NewGuid(), IdUsuario = usuario.IdUsuario, IdRol = rolExistente.IdRol });
                             await _dataContext.SaveChangesAsync();
                         }
-
-                        _dataContext.UsuarioRoles.Add(new UsuarioRole { IdUsuarioRol = Guid.NewGuid(), IdUsuario = usuario.IdUsuario, IdRol = rolExistente.IdRol });
-                        await _dataContext.SaveChangesAsync();
                     }
-
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -167,26 +175,66 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return response;
         }
 
-        //public async Task<CrearResponse> CrearUsuario(UsuarioDTO usuarioParam)
+
+        //public async Task<PaginationFilterResponse<UsuarioDTO>> ConsultarUsuarios(int start, int length, CancellationToken cancellationToken)
         //{
+        //    var usuarios = new PaginationFilterResponse<UsuarioDTO>();
+
         //    try
         //    {
-        //        var usuario = _mapper.Map<Usuario>(usuarioParam);
-        //        _dataContext.Usuarios.Add(usuario);
-        //        await _dataContext.SaveChangesAsync();
-        //    }
+        //        var usuariosConRoles = _dataContext.Usuarios
+        //         .Where(u => u.UsuarioRoles.Any()) // Filtra usuarios que tienen roles
+        //         .Select(u => new UsuarioDTO
+        //         {
+        //             IdUsuario = u.IdUsuario,
+        //             Nombres = u.Nombres,
+        //             Apellidos = u.Apellidos,
+        //             Correo = u.Correo,
+        //             Rol = u.UsuarioRoles
+        //                 .Where(ur => ur.IdRolNavigation != null) // Filtra roles no nulos
+        //                 .Select(ur => ur.IdRolNavigation.NombreRol)
+        //                 .ToList()
+        //         });
 
+
+        //        usuarios = await usuariosConRoles.PaginationAsync(start, length, _mapper);
+        //    }
         //    catch (Exception ex)
         //    {
-        //        _logger.LogError("Crear usuario [" + JsonConvert.SerializeObject(usuarioParam) + "]", ex);
+        //        _logger.LogError("Consultar usuarios", ex.Message);
         //        throw new VeterinariaYaraException(ex.Message);
         //    }
-
-        //    var response = new CrearResponse
-        //    {
-        //        Response = "El usuario fue creado con éxito"
-        //    };
-        //    return response;
+        //    return usuarios;
         //}
+
+        public async Task<PaginationFilterResponse<UsuarioDTO>> ConsultarUsuarios(int start, int length, CancellationToken cancellationToken)
+        {
+            var usuarios = new PaginationFilterResponse<UsuarioDTO>();
+
+            try
+            {
+                var usuariosConRoles = _dataContext.Usuarios
+                 .Where(u => u.UsuarioRoles.Any())
+                 .Select(u => new UsuarioDTO
+                 {
+                     IdUsuario = u.IdUsuario,
+                     Nombres = u.Nombres,
+                     Apellidos = u.Apellidos,
+                     Correo = u.Correo,
+                     Rol = u.UsuarioRoles
+                         .Where(ur => ur.IdRolNavigation != null)
+                         .Select(ur => ur.IdRolNavigation.NombreRol)
+                         .ToList()
+                 });
+
+                usuarios = await usuariosConRoles.PaginationAsync(start, length, _mapper);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Consultar usuarios", ex.Message);
+                throw new VeterinariaYaraException(ex.Message);
+            }
+            return usuarios;
+        }
     }
 }

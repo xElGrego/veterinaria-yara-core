@@ -1,5 +1,7 @@
-
+using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using veterinaria.yara.domain.entities;
 
 namespace veterinaria.yara.infrastructure.data.repositories
@@ -16,14 +18,15 @@ namespace veterinaria.yara.infrastructure.data.repositories
         }
 
         public virtual DbSet<Estado> Estados { get; set; } = null!;
+        public virtual DbSet<Historial> Historials { get; set; } = null!;
         public virtual DbSet<Mascota> Mascotas { get; set; } = null!;
         public virtual DbSet<Mensaje> Mensajes { get; set; } = null!;
         public virtual DbSet<Raza> Razas { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<TipoEvento> TipoEventos { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
         public virtual DbSet<UsuarioMascota> UsuarioMascotas { get; set; } = null!;
         public virtual DbSet<UsuarioRole> UsuarioRoles { get; set; } = null!;
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Estado>(entity =>
@@ -34,6 +37,29 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Historial>(entity =>
+            {
+                entity.HasKey(e => e.IdHistorial)
+                    .HasName("PK__Historia__9CC7DBB4D2F47BBE");
+
+                entity.ToTable("Historial");
+
+                entity.Property(e => e.IdHistorial).ValueGeneratedNever();
+
+                entity.Property(e => e.Descripcion).HasColumnType("text");
+
+                entity.HasOne(d => d.IdMascotaNavigation)
+                    .WithMany(p => p.Historials)
+                    .HasForeignKey(d => d.IdMascota)
+                    .HasConstraintName("FK__Historial__IdMas__30C33EC3");
+
+                entity.HasOne(d => d.IdTipoEventoNavigation)
+                    .WithMany(p => p.Historials)
+                    .HasForeignKey(d => d.IdTipoEvento)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Historial__IdTip__31B762FC");
             });
 
             modelBuilder.Entity<Mascota>(entity =>
@@ -50,6 +76,8 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(250)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Orden).HasComment("Sirve para tener el orden de posicion en el front");
 
                 entity.Property(e => e.Peso).HasColumnType("decimal(5, 2)");
 
@@ -103,6 +131,20 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 entity.Property(e => e.NombreRol)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TipoEvento>(entity =>
+            {
+                entity.HasKey(e => e.IdTipoEvento)
+                    .HasName("PK__TipoEven__CDB3A3BE529F2D74");
+
+                entity.ToTable("TipoEvento");
+
+                entity.Property(e => e.IdTipoEvento).ValueGeneratedNever();
+
+                entity.Property(e => e.Descripcion).HasColumnType("text");
+
+                entity.Property(e => e.Nombre).HasMaxLength(255);
             });
 
             modelBuilder.Entity<Usuario>(entity =>

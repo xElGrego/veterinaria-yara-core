@@ -1,12 +1,13 @@
-namespace veterinaria.yara.domain.DTOs
+namespace veterinaria.yara.domain.DTOs.Usuario
 {
-    public class UsuarioDTO
+    public class NuevoUsuarioDTO
     {
+        public Guid IdUsuario { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string? Correo { get; set; }
         public string Clave { get; set; }
         public string? Token { get; set; }
-        public string? Rol { get; set; }
+        public List<string?> Rol { get; set; }
     }
 }
