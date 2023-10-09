@@ -15,5 +15,6 @@ namespace veterinaria.yara.application.interfaces.repositories
         Task<CrearResponse> ActivarMascota(Guid idMascota);
         Task<CrearResponse> EliminarMascota(Guid idMascota);
         Task<MascotaDTO> UltimaMascota(Guid idUsuario);
+        Task<CrearResponse> ReordenarMascota(List<ReordenarMascotaDTO> mascotas);
     }
 }

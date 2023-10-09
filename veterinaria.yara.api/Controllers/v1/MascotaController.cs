@@ -34,7 +34,7 @@ namespace veterinaria.yara.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/consulta-mascotas")]
-        public async Task<ActionResult<PaginationFilterResponse<MascotaDTO>>> ConsultarMascotas(int start, Int16 lenght,  string? nombre, int estado, DateTime fechaInicio, DateTime fechaFin, Guid idUsuario,
+        public async Task<ActionResult<PaginationFilterResponse<MascotaDTO>>> ConsultarMascotas(int start, Int16 lenght, string? nombre, int estado, DateTime fechaInicio, DateTime fechaFin, Guid idUsuario,
         CancellationToken cancellationToken)
         {
             var response = await _mascotaRepository.ConsultarMascotas(start, lenght, nombre, estado, fechaInicio, fechaFin, idUsuario, cancellationToken);
@@ -150,6 +150,23 @@ namespace veterinaria.yara.api.Controllers.v1
         {
             var response = await _mascotaRepository.UltimaMascota(IdUsuario);
             return Ok(new MsDtoResponse<MascotaDTO>(response));
+        }
+
+        /// <summary>
+        /// Método para obtener las mascotas
+        /// </summary>
+        /// <param name="IdUsuario"> Id del usuario a buscar </param>
+        [HttpPost]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(MsDtoResponse<CrearResponse>), 200)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 400)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 500)]
+        [Route("/v1/veterinaria-yara/ordenar-mascota")]
+        public async Task<ActionResult<CrearResponse>> ReordearMascota([FromBody][Required] List<ReordenarMascotaDTO> mascotas)
+        {
+            var response = await _mascotaRepository.ReordenarMascota(mascotas);
+            return Ok(new MsDtoResponse<CrearResponse>(response));
         }
     }
 }

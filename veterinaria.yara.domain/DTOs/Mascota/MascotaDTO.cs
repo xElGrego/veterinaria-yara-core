@@ -12,5 +12,7 @@ namespace veterinaria.yara.domain.DTOs.Mascota
         public DateTime? FechaIngreso { get; set; }
         public DateTime? FechaModificacion { get; set; }
         public int? Estado { get; set; }
+        public int? Orden { get; set; }
+
     }
 }

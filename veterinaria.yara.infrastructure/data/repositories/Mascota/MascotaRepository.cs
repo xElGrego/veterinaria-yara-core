@@ -321,7 +321,8 @@ namespace veterinaria.yara.infrastructure.data.repositories
                             IdRaza = mascota.IdRaza,
                             FechaIngreso = mascota.FechaIngreso,
                             FechaModificacion = mascota.FechaModificacion,
-                            Estado = mascota.Estado
+                            Estado = mascota.Estado,
+                            Orden = mascota.Orden
                         });
 
                 if (idUsuario != Guid.Empty)
@@ -337,6 +338,29 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 throw new VeterinariaYaraException(ex.Message);
             }
             return mascotas;
+        }
+
+        public async Task<CrearResponse> ReordenarMascota(List<ReordenarMascotaDTO> mascotas)
+        {
+
+            foreach (var ordenMascota in mascotas)
+            {
+                var mascota = await _dataContext.Mascotas.FindAsync(ordenMascota.IdMascota);
+                if (mascota == null)
+                {
+                    throw new VeterinariaYaraException("Mascota no encontrada");
+                }
+
+                mascota.Orden = ordenMascota.Orden;
+            }
+            await _dataContext.SaveChangesAsync();
+
+            var response = new CrearResponse
+            {
+                Response = "Mascotas ordenadas con éxito"
+            };
+
+            return response;
         }
     }
 }
