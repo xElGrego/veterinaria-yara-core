@@ -33,6 +33,14 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 fechaInicio = fechaInicio.Date;
                 fechaFin = fechaFin.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
 
+                var totalRegistros = await _dataContext.Mascotas
+                    .Join(_dataContext.UsuarioMascotas,
+                        mascota => mascota.IdMascota,
+                        usuarioMascota => usuarioMascota.IdMascota,
+                        (mascota, usuarioMascota) => mascota)
+                    .Where(mascota => mascota.FechaIngreso >= fechaInicio && mascota.FechaIngreso <= fechaFin)
+                    .CountAsync();
+
                 var mascotasQuery = _dataContext.Mascotas
                     .Join(_dataContext.UsuarioMascotas,
                         mascota => mascota.IdMascota,
@@ -49,7 +57,9 @@ namespace veterinaria.yara.infrastructure.data.repositories
                             FechaIngreso = mascota.FechaIngreso,
                             FechaModificacion = mascota.FechaModificacion,
                             Estado = mascota.Estado
-                        });
+                        })
+                        .Take(length);
+
 
                 if (idUsuarioParam != Guid.Empty)
                 {
@@ -69,7 +79,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 mascotasQuery = mascotasQuery
                     .Where(mascota => mascota.FechaIngreso >= fechaInicio && mascota.FechaIngreso <= fechaFin).OrderBy(mascota => mascota.FechaIngreso);
 
-                mascotas = await mascotasQuery.PaginationAsync(start, length, _mapper);
+                mascotas = await mascotasQuery.PaginationAsync(start, length, totalRegistros, _mapper);
             }
             catch (Exception ex)
             {
@@ -330,7 +340,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                     mascotasQuery = mascotasQuery.Where(mascota => mascota.IdUsuario == idUsuario);
                 }
 
-                mascotas = await mascotasQuery.PaginationAsync(start, length, _mapper);
+                mascotas = await mascotasQuery.PaginationAsync(start, length, 0,_mapper);
             }
             catch (Exception ex)
             {

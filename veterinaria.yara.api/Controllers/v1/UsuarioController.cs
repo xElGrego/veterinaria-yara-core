@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using veterinaria.yara.application.interfaces.repositories;
@@ -39,6 +40,7 @@ namespace veterinaria.yara.api.Controllers.v1
         }
 
         [HttpPost]
+        [Authorize(Policy = "SuperAdministrador")]
         [Consumes("application/json")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(MsDtoResponse<CrearResponse>), 200)]
@@ -46,7 +48,6 @@ namespace veterinaria.yara.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/crear-usuario")]
         public async Task<ActionResult<MsDtoResponse<CrearResponse>>> CrearUsuario([FromBody][Required] NuevoUsuarioDTO usuario)
-
         {
             var response = await _usuariorRepository.CrearUsuario(usuario);
             return Ok(new MsDtoResponse<CrearResponse>(response));

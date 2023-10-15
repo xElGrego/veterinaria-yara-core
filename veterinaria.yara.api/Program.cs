@@ -19,6 +19,13 @@ builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SuperAdministrador", policy =>
+        policy.RequireRole("SuperAdministrador"));
+});
+
 builder.Services.AddSwaggerGen(options =>
 {
     var title = builder.Configuration["OpenApi:info:title"];

@@ -163,7 +163,7 @@ namespace veterinaria.yara.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/ordenar-mascota")]
-        public async Task<ActionResult<CrearResponse>> ReordearMascota([FromBody][Required] List<ReordenarMascotaDTO> mascotas)
+        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> ReordenarMascota([FromBody][Required] List<ReordenarMascotaDTO> mascotas)
         {
             var response = await _mascotaRepository.ReordenarMascota(mascotas);
             return Ok(new MsDtoResponse<CrearResponse>(response));

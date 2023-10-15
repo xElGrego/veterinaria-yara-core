@@ -113,7 +113,8 @@ namespace veterinaria.yara.infrastructure.data.repositories
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,usuario.Nombres),
-                new Claim(ClaimTypes.Email,usuario.Correo)
+                new Claim(ClaimTypes.Email,usuario.Correo),
+                new Claim(ClaimTypes.Role,usuario.Rol.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Key").Value));
@@ -227,7 +228,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                          .ToList()
                  });
 
-                usuarios = await usuariosConRoles.PaginationAsync(start, length, _mapper);
+                usuarios = await usuariosConRoles.PaginationAsync(start, length,0, _mapper);
             }
             catch (Exception ex)
             {

@@ -57,6 +57,7 @@ public static class DataPageExtension
     this IQueryable<T> query,
     int startRow,
     int limit,
+    int totalRegistros,
     IMapper _mapper
     )
     {
@@ -64,8 +65,8 @@ public static class DataPageExtension
         paged.pagination.Limit = limit;
         List<T> consulta = await query.Skip(startRow).Take(limit).ToListAsync();
         paged.consulta = _mapper.Map<List<T>>(consulta);
-        int totalItemsCountTask = await query.CountAsync();
-        paged.pagination.Total = totalItemsCountTask;
+        //int totalItemsCountTask = await query.CountAsync();
+        paged.pagination.Total = totalRegistros;
         paged.pagination.Returned = consulta.Count();
         paged.pagination.Offset = startRow;
         return paged;
