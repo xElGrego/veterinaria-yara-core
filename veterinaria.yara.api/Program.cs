@@ -6,9 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using veterinaria.yara.api.Extensions;
-using veterinaria.yara.api.SignalR;
+using veterinaria.yara.api.Service;
 using veterinaria.yara.infrastructure.extentions;
 using veterinaria.yara.infrastructure.ioc;
+using veterinaria.yara.infrastructure.signalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,10 +70,7 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
-//builder.Services.AddHostedService<RabbitMQNotificationService>();
-builder.Services.AddHostedService<RabbitMQBackgroundService>();
-
-
+builder.Services.AddHostedService<RabbitMQService>();
 
 builder.Services.RegisterDependencies();
 builder.Services.AddInfraestructure(builder.Configuration);
@@ -114,15 +112,13 @@ builder.Services.AddCors(options =>
 
 
 builder.Host.UseSerilog(SeriLogger.Configure);
-builder.Services.AddSingleton<RabbitMQConsumer>(); // Agrega el consumidor de RabbitMQ
+//builder.Services.AddSingleton<RabbitMQConsumer>(); // Agrega el consumidor de RabbitMQ
 
 
 var app = builder.Build();
 
-app.MapHub<SignalHubGroup>("/signalRGroup");
-app.MapHub<SignalHub>("/signalR");
-app.MapHub<ChatHub>("/chatHubR");
 
+app.MapHub<NotificacionHub>("/notificaciones-globales");
 
 
 app.UseSerilogRequestLogging();

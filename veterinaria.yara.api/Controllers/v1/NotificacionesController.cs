@@ -4,7 +4,6 @@ using veterinaria.yara.application.interfaces.repositories;
 using veterinaria.yara.application.models.dtos;
 using veterinaria.yara.domain.DTOs;
 using Microsoft.AspNetCore.SignalR;
-using veterinaria.yara.api.SignalR;
 
 
 namespace veterinaria.yara.api.Controllers.v1
@@ -15,12 +14,10 @@ namespace veterinaria.yara.api.Controllers.v1
     public class NotificacionesController : BaseApiController
     {
         private readonly INotificaciones _notificaciones;
-        private readonly IHubContext<ChatHub> _hubContext;
 
-        public NotificacionesController(INotificaciones notificaciones, IHubContext<ChatHub> hubContext)
+        public NotificacionesController(INotificaciones notificaciones)
         {
             _notificaciones = notificaciones ?? throw new ArgumentNullException(nameof(notificaciones));
-            _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
         }
 
 
@@ -53,6 +50,5 @@ namespace veterinaria.yara.api.Controllers.v1
             var response = await _notificaciones.NotificacionUsuario(message, idUsuario);
             return Ok(response);
         }
-
     }
 }

@@ -10,6 +10,7 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
     public class INotificacionesRepository : INotificaciones
     {
         private ILogger<INotificacionesRepository> _logger;
+
         public INotificacionesRepository(ILogger<INotificacionesRepository> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -76,40 +77,5 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
             }
         }
 
-
-        public async Task Escuchando()
-        {
-            try
-            {
-                var factory = new ConnectionFactory
-                {
-                    HostName = "localhost",
-                    UserName = "grego977",
-                    Password = "yara19975"
-                };
-
-                using (var connection = factory.CreateConnection())
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        channel.QueueDeclare(queue: "notificacions_user", durable: false, exclusive: false, autoDelete: false, arguments: null);
-
-                        var consumer = new EventingBasicConsumer(channel);
-
-                        consumer.Received += (model, ea) =>
-                        {
-                            var body = ea.Body.ToArray();
-                            var message = Encoding.UTF8.GetString(body);
-                            _logger.LogInformation("Mensaje" + message);
-                        };
-                        channel.BasicConsume(queue: "notificacions_user", autoAck: true, consumer: consumer);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new VeterinariaYaraException($"Error, Escuchado", ex.Message);
-            }
-        }
     }
 }
