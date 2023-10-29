@@ -69,9 +69,7 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
-
-
-
+builder.Services.AddHostedService<RabbitMQNotificationService>();
 
 builder.Services.RegisterDependencies();
 builder.Services.AddInfraestructure(builder.Configuration);
@@ -119,6 +117,8 @@ var app = builder.Build();
 
 app.MapHub<SignalHubGroup>("/signalRGroup");
 app.MapHub<SignalHub>("/signalR");
+app.MapHub<ChatHub>("/chatHubR");
+
 
 
 app.UseSerilogRequestLogging();

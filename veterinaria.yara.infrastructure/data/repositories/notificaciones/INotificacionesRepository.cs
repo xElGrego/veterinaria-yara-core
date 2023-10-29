@@ -2,11 +2,20 @@ using veterinaria.yara.application.interfaces.repositories;
 using RabbitMQ.Client;
 using System.Text;
 using veterinaria.yara.application.models.exceptions;
+using RabbitMQ.Client.Events;
+using Microsoft.Extensions.Logging;
+using veterinaria.yara.domain.entities;
 
 namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
 {
     public class INotificacionesRepository : INotificaciones
     {
+        private ILogger<INotificacionesRepository> _logger;
+        public INotificacionesRepository(ILogger<INotificacionesRepository> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         public async Task<bool> NotificacionOfertas(string message)
         {
             try
@@ -22,9 +31,11 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                 {
                     using (var channel = connection.CreateModel())
                     {
-                        channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout);
+                        //channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout);
+                        channel.QueueDeclare(queue: "notificacions", durable: false, exclusive: false, autoDelete: false, arguments: null);
                         var body = Encoding.UTF8.GetBytes(message);
-                        channel.BasicPublish(exchange: "notificacions", routingKey: "", basicProperties: null, body: body);
+                        channel.BasicPublish(exchange: "", routingKey: "notificacions", basicProperties: null, body: body);
+                        _logger.LogInformation("Cola notificacion" + message);
                         return true;
                     }
                 }
@@ -63,6 +74,42 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
             catch (Exception ex)
             {
                 throw new VeterinariaYaraException($"Error, Notificaciones usuario :{idUsuario}", ex.Message);
+            }
+        }
+
+
+        public async Task Escuchando()
+        {
+            try
+            {
+                var factory = new ConnectionFactory
+                {
+                    HostName = "localhost",
+                    UserName = "grego977",
+                    Password = "yara19975"
+                };
+
+                using (var connection = factory.CreateConnection())
+                {
+                    using (var channel = connection.CreateModel())
+                    {
+                        channel.QueueDeclare(queue: "notificacions_user", durable: false, exclusive: false, autoDelete: false, arguments: null);
+
+                        var consumer = new EventingBasicConsumer(channel);
+
+                        consumer.Received += (model, ea) =>
+                        {
+                            var body = ea.Body.ToArray();
+                            var message = Encoding.UTF8.GetString(body);
+                            _logger.LogInformation("Mensaje" + message);
+                        };
+                        channel.BasicConsume(queue: "notificacions_user", autoAck: true, consumer: consumer);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new VeterinariaYaraException($"Error, Escuchado", ex.Message);
             }
         }
     }
