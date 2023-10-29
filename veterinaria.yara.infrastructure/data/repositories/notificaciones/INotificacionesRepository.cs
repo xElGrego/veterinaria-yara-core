@@ -31,17 +31,16 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                 {
                     using (var channel = connection.CreateModel())
                     {
-                        //channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout);
-                        channel.QueueDeclare(queue: "notificacions", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                        channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout);
                         var body = Encoding.UTF8.GetBytes(message);
-                        channel.BasicPublish(exchange: "", routingKey: "notificacions", basicProperties: null, body: body);
-                        _logger.LogInformation("Cola notificacion" + message);
+                        channel.BasicPublish(exchange: "notificacions", routingKey: "", basicProperties: null, body: body);
                         return true;
                     }
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error al notificar" + ex.Message);
                 throw new VeterinariaYaraException("Error, Notificaciones ofertas", ex.Message);
             }
         }

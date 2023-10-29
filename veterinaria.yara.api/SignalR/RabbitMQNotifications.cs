@@ -32,7 +32,9 @@ namespace veterinaria.yara.api.SignalR
                     using (var connection = factory.CreateConnection())
                     using (var channel = connection.CreateModel())
                     {
-                        channel.QueueDeclare(queue: "notificacions", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                        channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout);
+                        var queuName = channel.QueueDeclare().QueueName;
+                        channel.QueueBind(queue: queuName, exchange: "notificacions", routingKey: "");
 
                         var consumer = new EventingBasicConsumer(channel);
                         consumer.Received += (model, ea) =>
@@ -54,34 +56,5 @@ namespace veterinaria.yara.api.SignalR
                 }
             }
         }
-
-        //protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        //{
-        //    var factory = new ConnectionFactory
-        //    {
-        //        HostName = "localhost",
-        //        UserName = "grego977",
-        //        Password = "yara19975"
-        //    };
-
-        //    using (var connection = factory.CreateConnection())
-        //    using (var channel = connection.CreateModel())
-        //    {
-        //        channel.QueueDeclare(queue: "notificacions", durable: false, exclusive: false, autoDelete: false, arguments: null);
-
-        //        var consumer = new EventingBasicConsumer(channel);
-        //        consumer.Received += (model, ea) =>
-        //        {
-        //            var body = ea.Body.ToArray();
-        //            var message = Encoding.UTF8.GetString(body);
-        //            Console.WriteLine("Mensaje"+message);
-        //            _hubContext.Clients.All.SendAsync("Notificar", message);
-        //        };
-
-        //        channel.BasicConsume(queue: "notificacions", autoAck: true, consumer: consumer);
-
-        //        await Task.Delay(Timeout.Infinite, stoppingToken);
-        //    }
-        //}
     }
 }
