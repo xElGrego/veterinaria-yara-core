@@ -32,24 +32,20 @@ namespace veterinaria.yara.api.SignalR
                     using (var connection = factory.CreateConnection())
                     using (var channel = connection.CreateModel())
                     {
-                        //channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout);
                         channel.ExchangeDeclare("notificacions", ExchangeType.Fanout);
-                        channel.QueueDeclare("queue",
+                        channel.QueueDeclare(queue: "queue",
                             durable: true,
                             exclusive: false,
                             autoDelete: false,
                             arguments: null);
 
-
-                        channel.QueueBind("queue", "notificacions", string.Empty);
-                        //channel.BasicQos(0, 10, false);
+                        channel.QueueBind(queue: "queue", exchange: "notificacions", routingKey: string.Empty);
 
                         var consumer = new EventingBasicConsumer(channel);
                         consumer.Received += (model, ea) =>
                         {
                             var body = ea.Body.ToArray();
                             var message = Encoding.UTF8.GetString(body);
-                            _logger.LogInformation("Mensaje: " + message);
                             _hubContext.Clients.All.SendAsync("Notificar", message);
                         };
 

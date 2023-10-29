@@ -24,6 +24,9 @@ namespace veterinaria.yara.api.Controllers.v1
         }
 
 
+        /// <summary>
+        /// Método para enviar ofertas a todos los usuarios (rabbitmq: fannout)
+        /// </summary>
         [HttpPost]
         [Consumes("application/json")]
         [Produces("application/json")]

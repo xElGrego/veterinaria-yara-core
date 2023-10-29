@@ -31,10 +31,10 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                 {
                     using (var channel = connection.CreateModel())
                     {
-                        channel.ExchangeDeclare("notificacions", ExchangeType.Fanout, arguments: null);
+                        channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout, arguments: null);
                         var body = Encoding.UTF8.GetBytes(message);
                         var properties = channel.CreateBasicProperties();
-                        channel.BasicPublish("notificacions", "", properties, body);
+                        channel.BasicPublish(exchange: "notificacions", routingKey: "", basicProperties: properties, body: body);
                         return true;
                     }
                 }
