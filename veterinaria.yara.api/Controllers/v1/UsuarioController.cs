@@ -40,14 +40,14 @@ namespace veterinaria.yara.api.Controllers.v1
         }
 
         [HttpPost]
-        [Authorize(Policy = "SuperAdministrador")]
+        //[Authorize(Policy = "SuperAdministrador")]
         [Consumes("application/json")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(MsDtoResponse<CrearResponse>), 200)]
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/crear-usuario")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> CrearUsuario([FromBody][Required] NuevoUsuarioDTO usuario)
+        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> CrearUsuario([FromBody][Required] AgregarUsuarioDTO usuario)
         {
             var response = await _usuariorRepository.CrearUsuario(usuario);
             return Ok(new MsDtoResponse<CrearResponse>(response));

@@ -131,7 +131,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
             return token;
         }
 
-        public async Task<CrearResponse> CrearUsuario(NuevoUsuarioDTO usuarioParam)
+        public async Task<CrearResponse> CrearUsuario(AgregarUsuarioDTO usuarioParam)
         {
             using (var transaction = _dataContext.Database.BeginTransaction())
             {

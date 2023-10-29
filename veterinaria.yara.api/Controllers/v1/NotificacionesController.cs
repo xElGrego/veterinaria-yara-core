@@ -45,5 +45,8 @@ namespace veterinaria.yara.api.Controllers.v1
             var response = await _notificaciones.NotificacionUsuario(message, idUsuario);
             return Ok(response);
         }
+
+
+
     }
 }

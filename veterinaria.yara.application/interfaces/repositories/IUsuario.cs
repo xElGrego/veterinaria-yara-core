@@ -7,7 +7,7 @@ namespace veterinaria.yara.application.interfaces.repositories
     public interface IUsuario
     {
         Task<NuevoUsuarioDTO> Login(UsuarioLogeoDTO usuario);
-        Task<CrearResponse> CrearUsuario(NuevoUsuarioDTO usuario);
+        Task<CrearResponse> CrearUsuario(AgregarUsuarioDTO usuario);
         Task<PaginationFilterResponse<UsuarioDTO>> ConsultarUsuarios(int start, int length, CancellationToken cancellationToken);
     }
 }

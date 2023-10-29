@@ -23,7 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("SuperAdministrador", policy =>
-        policy.RequireRole("SuperAdministrador"));
+    policy.RequireRole("SuperAdministrador"));
 });
 
 builder.Services.AddSwaggerGen(options =>
@@ -38,14 +38,13 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Title = title,
         Description = description,
-
     });
+
     options.SwaggerDoc("v2", new OpenApiInfo
     {
         Version = version,
         Title = title,
         Description = description,
-
     });
 
     var jwtSecurityScheme = new OpenApiSecurityScheme
