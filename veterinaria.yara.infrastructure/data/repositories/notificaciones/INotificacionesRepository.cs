@@ -4,7 +4,6 @@ using System.Text;
 using veterinaria.yara.application.models.exceptions;
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Logging;
-using veterinaria.yara.domain.entities;
 
 namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
 {

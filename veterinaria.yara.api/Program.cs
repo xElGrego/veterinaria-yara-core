@@ -69,7 +69,10 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
-builder.Services.AddHostedService<RabbitMQNotificationService>();
+//builder.Services.AddHostedService<RabbitMQNotificationService>();
+builder.Services.AddHostedService<RabbitMQBackgroundService>();
+
+
 
 builder.Services.RegisterDependencies();
 builder.Services.AddInfraestructure(builder.Configuration);
@@ -111,6 +114,7 @@ builder.Services.AddCors(options =>
 
 
 builder.Host.UseSerilog(SeriLogger.Configure);
+builder.Services.AddSingleton<RabbitMQConsumer>(); // Agrega el consumidor de RabbitMQ
 
 
 var app = builder.Build();
