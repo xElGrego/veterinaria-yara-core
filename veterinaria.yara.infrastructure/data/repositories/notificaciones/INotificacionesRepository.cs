@@ -31,9 +31,12 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                 {
                     using (var channel = connection.CreateModel())
                     {
-                        channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout);
+                        channel.ExchangeDeclare("demo-fanout-exchange", ExchangeType.Fanout, arguments: null);
                         var body = Encoding.UTF8.GetBytes(message);
-                        channel.BasicPublish(exchange: "notificacions", routingKey: "", basicProperties: null, body: body);
+                        var properties = channel.CreateBasicProperties();
+                        properties.Headers = new Dictionary<string, object> { { "account", "update" } };
+                        channel.BasicPublish("demo-fanout-exchange", "account.new", properties, body);
+                        //channel.BasicPublish(exchange: "notificacions", routingKey: "", basicProperties: null, body: body);
                         return true;
                     }
                 }
