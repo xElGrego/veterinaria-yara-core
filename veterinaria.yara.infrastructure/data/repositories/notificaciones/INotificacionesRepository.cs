@@ -32,6 +32,8 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                     using (var channel = connection.CreateModel())
                     {
                         channel.ExchangeDeclare(exchange: "notificacions", type: ExchangeType.Fanout, arguments: null);
+                        channel.QueueDeclare(queue: "queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                        channel.QueueBind(queue: "queue", exchange: "notificacions", routingKey: "");
                         var body = Encoding.UTF8.GetBytes(message);
                         var properties = channel.CreateBasicProperties();
                         channel.BasicPublish(exchange: "notificacions", routingKey: "", basicProperties: properties, body: body);
@@ -61,11 +63,12 @@ namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
                 {
                     using (var channel = connection.CreateModel())
                     {
-                        channel.ExchangeDeclare(exchange: "notificacions_user", type: ExchangeType.Direct);
+                        channel.ExchangeDeclare(exchange: "notificacions_user", type: ExchangeType.Direct, arguments: null);
                         var queueName = channel.QueueDeclare().QueueName;
                         // Vincula la cola al intercambio con la clave de enrutamiento igual al ID del usuario
                         channel.QueueBind(queue: queueName, exchange: "notificacions_user", routingKey: idUsuario.ToString());
                         var body = Encoding.UTF8.GetBytes(message);
+                        var properties = channel.CreateBasicProperties();
                         channel.BasicPublish(exchange: "notificacions_user", routingKey: idUsuario.ToString(), basicProperties: null, body: body);
                         return true;
                     }
