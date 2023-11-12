@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Prometheus;
 using System.Text.Json;
-using veterinaria.yara.application.models.dtos;
-using veterinaria.yara.application.models.exceptions;
+using veterinaria_yara_core.application.models.dtos;
+using veterinaria_yara_core.application.models.exceptions;
 
-namespace veterinaria.yara.infrastructure.extentions
+namespace veterinaria_yara_core.infrastructure.extentions
 {
     public static class ApplicationsExtentions
     {

@@ -1,4 +1,4 @@
-namespace veterinaria.yara.domain.DTOs.Estados
+namespace veterinaria_yara_core.domain.DTOs.Estados
 {
     public class EstadosDTO
     {

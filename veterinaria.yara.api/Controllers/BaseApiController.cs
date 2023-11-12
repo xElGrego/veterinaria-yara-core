@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace veterinaria.yara.api.Controllers
+namespace veterinaria_yara_core.api.Controllers
 {
     //[Authorize]
     [ApiController]

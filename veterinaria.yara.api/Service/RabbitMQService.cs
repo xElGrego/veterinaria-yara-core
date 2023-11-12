@@ -1,6 +1,6 @@
-using veterinaria.yara.application.interfaces.repositories;
+using veterinaria_yara_core.application.interfaces.repositories;
 
-namespace veterinaria.yara.api.Service
+namespace veterinaria_yara_core.api.Service
 {
     public class RabbitMQService : BackgroundService
     {

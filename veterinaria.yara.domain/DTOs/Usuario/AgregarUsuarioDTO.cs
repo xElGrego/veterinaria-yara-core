@@ -1,4 +1,4 @@
-namespace veterinaria.yara.domain.DTOs.Usuario
+namespace veterinaria_yara_core.domain.DTOs.Usuario
 {
     public class AgregarUsuarioDTO
     {

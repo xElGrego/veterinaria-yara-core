@@ -1,12 +1,12 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.application.models.exceptions;
-using veterinaria.yara.domain.DTOs;
-using veterinaria.yara.domain.entities;
+using veterinaria_yara_core.application.models.exceptions;
+using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.entities;
+using veterinaria_yara_core.application.interfaces.repositories;
 
-namespace veterinaria.yara.infrastructure.data.repositories.chat
+namespace veterinaria_yara_core.infrastructure.data.repositories.chat
 {
     public class Chat : IChat
     {

@@ -1,4 +1,4 @@
-namespace veterinaria.yara.domain.DTOs.Raza
+namespace veterinaria_yara_core.domain.DTOs.Raza
 {
     public class RazaDTO
     {

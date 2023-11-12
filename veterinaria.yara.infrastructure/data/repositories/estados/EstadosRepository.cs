@@ -1,11 +1,11 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.application.models.exceptions;
-using veterinaria.yara.domain.DTOs.Estados;
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.application.models.exceptions;
+using veterinaria_yara_core.domain.DTOs.Estados;
 
-namespace veterinaria.yara.infrastructure.data.repositories.estados
+namespace veterinaria_yara_core.infrastructure.data.repositories.estados
 {
     public class EstadosRepository : IEstados
     {

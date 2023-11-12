@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using veterinaria.yara.application.models.dtos;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.domain.DTOs.Estados;
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.domain.DTOs.Estados;
+using veterinaria_yara_core.application.models.dtos;
 
-namespace veterinaria.yara.api.Controllers.v1
+namespace veterinaria_yara_core.api.Controllers.v1
 {
     [Tags("Estado")]
     [ApiExplorerSettings(GroupName = "v1")]

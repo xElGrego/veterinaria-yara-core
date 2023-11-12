@@ -1,4 +1,4 @@
-namespace veterinaria.yara.domain.DTOs.Paginador
+namespace veterinaria_yara_core.domain.DTOs.Paginador
 {
     public class PaginationModel
     {

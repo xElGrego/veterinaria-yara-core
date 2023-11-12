@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.application.models.dtos;
-using veterinaria.yara.domain.DTOs;
-using Microsoft.AspNetCore.SignalR;
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.application.models.dtos;
+using veterinaria_yara_core.domain.DTOs;
 
-
-namespace veterinaria.yara.api.Controllers.v1
+namespace veterinaria_yara_core.api.Controllers.v1
 {
     [Tags("Notificaciones")]
     [ApiExplorerSettings(GroupName = "v1")]

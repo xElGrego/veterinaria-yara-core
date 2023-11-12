@@ -2,21 +2,22 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.application.models.exceptions;
-using veterinaria.yara.domain.DTOs;
-using veterinaria.yara.domain.DTOs.Mascota;
-using veterinaria.yara.domain.DTOs.Paginador;
-using veterinaria.yara.domain.DTOs.Raza;
-using veterinaria.yara.domain.DTOs.Usuario;
-using veterinaria.yara.domain.entities;
+using StackExchange.Redis;
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.application.models.exceptions;
+using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.DTOs.Paginador;
+using veterinaria_yara_core.domain.DTOs.Usuario;
+using veterinaria_yara_core.domain.entities;
+using veterinaria_yara_core.application.interfaces.repositories;
 
-namespace veterinaria.yara.infrastructure.data.repositories
+namespace veterinaria_yara_core.infrastructure.data.repositories
 {
     public class UsuarioRepository : IUsuario
     {
@@ -24,13 +25,18 @@ namespace veterinaria.yara.infrastructure.data.repositories
         private readonly IMapper _mapper;
         private readonly DataContext _dataContext;
         private readonly ILogger<UsuarioRepository> _logger;
+        private readonly IConnectionMultiplexer _connection;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UsuarioRepository(IConfiguration configuration, DataContext dataContext, ILogger<UsuarioRepository> logger, IMapper mapper)
+
+        public UsuarioRepository(IConfiguration configuration, DataContext dataContext, IConnectionMultiplexer connection, ILogger<UsuarioRepository> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         public async Task<NuevoUsuarioDTO> ObtenerRol(UsuarioLogeoDTO usuarioParam)
@@ -38,7 +44,6 @@ namespace veterinaria.yara.infrastructure.data.repositories
             var usuario = new NuevoUsuarioDTO();
             try
             {
-
                 var res = await _dataContext.Usuarios
                      .Where(u => u.Correo == usuarioParam.Correo && u.Clave == usuarioParam.Clave)
                      .Join(_dataContext.UsuarioRoles,
@@ -87,8 +92,8 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 {
                     throw new VeterinariaYaraException("El correo registrado no existe");
                 }
-                jwToken = GenerarToken(usuario);
 
+                jwToken = GenerarToken(usuario);
             }
             catch (Exception ex)
             {
@@ -104,7 +109,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 Token = jwToken,
                 Rol = usuario.Rol
             };
-
+            await SaveRedisAsync(usuarito, _httpContextAccessor.HttpContext);
             return usuarito;
         }
 
@@ -150,7 +155,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
 
                             if (rolExistente == null)
                             {
-                                rolExistente = new Role { IdRol = Guid.NewGuid(), NombreRol = rolNombre };
+                                rolExistente = new domain.entities.Role { IdRol = Guid.NewGuid(), NombreRol = rolNombre };
                                 _dataContext.Roles.Add(rolExistente);
                                 await _dataContext.SaveChangesAsync();
                             }
@@ -212,6 +217,10 @@ namespace veterinaria.yara.infrastructure.data.repositories
         {
             var usuarios = new PaginationFilterResponse<UsuarioDTO>();
 
+            var totalRegistros = await _dataContext.Usuarios
+            .Where(u => u.UsuarioRoles.Any())
+            .CountAsync();
+
             try
             {
                 var usuariosConRoles = _dataContext.Usuarios
@@ -228,7 +237,7 @@ namespace veterinaria.yara.infrastructure.data.repositories
                          .ToList()
                  });
 
-                usuarios = await usuariosConRoles.PaginationAsync(start, length,0, _mapper);
+                usuarios = await usuariosConRoles.PaginationAsync(start, length, totalRegistros, _mapper);
             }
             catch (Exception ex)
             {
@@ -236,6 +245,49 @@ namespace veterinaria.yara.infrastructure.data.repositories
                 throw new VeterinariaYaraException(ex.Message);
             }
             return usuarios;
+        }
+
+        async Task SaveRedisAsync(NuevoUsuarioDTO message, HttpContext httpContext)
+        {
+            try
+            {
+                var objectGuardar = new
+                {
+                    message.IdUsuario,
+                    message.Nombres,
+                    message.Apellidos,
+                    message.Rol,
+                    message.Correo,
+                    UserAgent = httpContext.Request.Headers["User-Agent"],
+                    RemoteIpAddress = httpContext.Connection.RemoteIpAddress?.ToString(),
+                    Device = DetermineDeviceType(httpContext.Request.Headers["User-Agent"])
+                };
+
+                var serializedData = JsonConvert.SerializeObject(objectGuardar);
+                var database = _connection.GetDatabase();
+                await database.ListRightPushAsync(_configuration.GetConnectionString("NameColSend"), serializedData); //recepcionSri
+                _logger.LogInformation("Guardar Redis  [" + JsonConvert.SerializeObject(message) + "]");
+            }
+            catch
+            {
+                _logger.LogInformation("Error Guardar Redis [" + JsonConvert.SerializeObject(message) + "]");
+            }
+        }
+
+        string DetermineDeviceType(string userAgent)
+        {
+            if (userAgent.Contains("Mobile", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Mobile";
+            }
+            else if (userAgent.Contains("Tablet", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Tablet";
+            }
+            else
+            {
+                return "Desktop";
+            }
         }
     }
 }

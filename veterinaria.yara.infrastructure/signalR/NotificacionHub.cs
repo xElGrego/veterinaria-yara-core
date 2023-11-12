@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace veterinaria.yara.infrastructure.signalR
+namespace veterinaria_yara_core.infrastructure.signalR
 {
     public class NotificacionHub : Hub
     {

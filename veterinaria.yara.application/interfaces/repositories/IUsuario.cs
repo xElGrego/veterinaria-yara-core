@@ -1,8 +1,8 @@
-using veterinaria.yara.domain.DTOs;
-using veterinaria.yara.domain.DTOs.Paginador;
-using veterinaria.yara.domain.DTOs.Usuario;
+using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.DTOs.Paginador;
+using veterinaria_yara_core.domain.DTOs.Usuario;
 
-namespace veterinaria.yara.application.interfaces.repositories
+namespace veterinaria_yara_core.application.interfaces.repositories
 {
     public interface IUsuario
     {

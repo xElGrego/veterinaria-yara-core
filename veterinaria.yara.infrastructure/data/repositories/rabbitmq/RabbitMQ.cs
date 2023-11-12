@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
-using veterinaria.yara.application.interfaces.repositories;
+using veterinaria_yara_core.application.interfaces.repositories;
 using System.Text;
-using veterinaria.yara.infrastructure.signalR;
+using veterinaria_yara_core.infrastructure.signalR;
 
-namespace veterinaria.yara.infrastructure.data.repositories.rabbitmq
+namespace veterinaria_yara_core.infrastructure.data.repositories.rabbitmq
 {
     public class RabbitMQRepository : IRabbitMQ
     {

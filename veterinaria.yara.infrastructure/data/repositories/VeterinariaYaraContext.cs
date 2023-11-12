@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using veterinaria.yara.domain.entities;
+using veterinaria_yara_core.domain.entities;
 
-namespace veterinaria.yara.infrastructure.data.repositories
+namespace veterinaria_yara_core.infrastructure.data.repositories
 {
     public partial class DataContext : DbContext
     {

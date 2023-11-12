@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
-namespace veterinaria.yara.api.Extensions
+namespace veterinaria_yara_core.api.Extensions
 {
     public static class ServiceExtensions
     {

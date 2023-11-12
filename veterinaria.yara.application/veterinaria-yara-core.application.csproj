@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>veterinaria_yara_core.application</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\veterinaria.yara.domain\veterinaria.yara.domain.csproj" />
+    <ProjectReference Include="..\veterinaria.yara.domain\veterinaria-yara-core.domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

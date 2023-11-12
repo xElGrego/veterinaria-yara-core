@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.application.models.dtos;
-using veterinaria.yara.domain.DTOs;
-using veterinaria.yara.domain.DTOs.Paginador;
-using veterinaria.yara.domain.DTOs.Raza;
 
-namespace veterinaria.yara.api.Controllers.v1
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.application.models.dtos;
+using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.DTOs.Paginador;
+using veterinaria_yara_core.domain.DTOs.Raza;
+
+namespace veterinaria_yara_core.api.Controllers.v1
 {
     [Tags("Raza")]
     [ApiExplorerSettings(GroupName = "v1")]

@@ -5,15 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.infrastructure.data.repositories;
-using veterinaria.yara.infrastructure.data.repositories.chat;
-using veterinaria.yara.infrastructure.data.repositories.estados;
-using veterinaria.yara.infrastructure.data.repositories.notificaciones;
-using veterinaria.yara.infrastructure.data.repositories.rabbitmq;
-using veterinaria.yara.infrastructure.mappings;
+using StackExchange.Redis;
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.infrastructure.data.repositories;
+using veterinaria_yara_core.infrastructure.data.repositories.chat;
+using veterinaria_yara_core.infrastructure.data.repositories.estados;
+using veterinaria_yara_core.infrastructure.data.repositories.notificaciones;
+using veterinaria_yara_core.infrastructure.data.repositories.rabbitmq;
+using veterinaria_yara_core.infrastructure.mappings;
 
-namespace veterinaria.yara.infrastructure.ioc
+namespace veterinaria_yara_core.infrastructure.ioc
 {
     public static class DependencyInyection
     {
@@ -48,6 +49,19 @@ namespace veterinaria.yara.infrastructure.ioc
 
             }, ServiceLifetime.Transient
             );
+
+            var configurationOptions = new ConfigurationOptions
+            {
+                EndPoints = { configuration.GetConnectionString("RedisUrl") ?? "" },
+                Password = configuration.GetConnectionString("RedisClave"),
+                AbortOnConnectFail = false
+            };
+
+            services
+                    .AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(configurationOptions))
+                    .BuildServiceProvider();
+
+            services.AddHttpContextAccessor();
 
             return services;
 

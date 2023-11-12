@@ -1,11 +1,10 @@
-using veterinaria.yara.application.interfaces.repositories;
+using veterinaria_yara_core.application.interfaces.repositories;
 using RabbitMQ.Client;
 using System.Text;
-using veterinaria.yara.application.models.exceptions;
-using RabbitMQ.Client.Events;
+using veterinaria_yara_core.application.models.exceptions;
 using Microsoft.Extensions.Logging;
 
-namespace veterinaria.yara.infrastructure.data.repositories.notificaciones
+namespace veterinaria_yara_core.infrastructure.data.repositories.notificaciones
 {
     public class INotificacionesRepository : INotificaciones
     {

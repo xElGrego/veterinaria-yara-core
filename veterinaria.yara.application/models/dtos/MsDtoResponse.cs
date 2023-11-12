@@ -1,4 +1,4 @@
-namespace veterinaria.yara.application.models.dtos
+namespace veterinaria_yara_core.application.models.dtos
 {
     public class MsDtoResponse<T>
     {

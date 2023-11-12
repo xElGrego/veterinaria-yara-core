@@ -1,4 +1,4 @@
-namespace veterinaria.yara.domain.DTOs
+namespace veterinaria_yara_core.domain.DTOs
 {
     public class RazaResponse
     {

@@ -2,14 +2,14 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.application.models.exceptions;
-using veterinaria.yara.domain.DTOs;
-using veterinaria.yara.domain.DTOs.Mascota;
-using veterinaria.yara.domain.DTOs.Paginador;
-using veterinaria.yara.domain.entities;
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.application.models.exceptions;
+using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.DTOs.Estados.Mascota;
+using veterinaria_yara_core.domain.DTOs.Paginador;
+using veterinaria_yara_core.domain.entities;
 
-namespace veterinaria.yara.infrastructure.data.repositories
+namespace veterinaria_yara_core.infrastructure.data.repositories
 {
     public class MascotaRestRepository : IMascota
     {

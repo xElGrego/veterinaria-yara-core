@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>veterinaria_yara_core.infrastructure</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,12 +35,13 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\veterinaria.yara.application\veterinaria.yara.application.csproj" />
+    <ProjectReference Include="..\veterinaria.yara.application\veterinaria-yara-core.application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

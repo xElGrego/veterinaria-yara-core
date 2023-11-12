@@ -4,15 +4,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Data;
-using veterinaria.yara.application.interfaces.repositories;
-using veterinaria.yara.application.models.exceptions;
-using veterinaria.yara.domain.DTOs;
-using veterinaria.yara.domain.DTOs.Paginador;
-using veterinaria.yara.domain.DTOs.Raza;
-using veterinaria.yara.domain.entities;
+using veterinaria_yara_core.application.interfaces.repositories;
+using veterinaria_yara_core.application.models.exceptions;
+using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.DTOs.Paginador;
+using veterinaria_yara_core.domain.DTOs.Raza;
+using veterinaria_yara_core.domain.entities;
 
 
-namespace veterinaria.yara.infrastructure.data.repositories
+namespace veterinaria_yara_core.infrastructure.data.repositories
 {
     public class RazaRestRepository : IRaza
     {

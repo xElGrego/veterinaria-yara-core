@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using veterinaria.yara.api.Extensions;
-using veterinaria.yara.api.Service;
-using veterinaria.yara.infrastructure.extentions;
-using veterinaria.yara.infrastructure.ioc;
-using veterinaria.yara.infrastructure.signalR;
+using veterinaria_yara_core.api.Extensions;
+using veterinaria_yara_core.api.Service;
+using veterinaria_yara_core.infrastructure.extentions;
+using veterinaria_yara_core.infrastructure.ioc;
+using veterinaria_yara_core.infrastructure.signalR;
+using veterinaria_yara_core.api.Extensions;
+using veterinaria_yara_core.api.Service;
+using veterinaria_yara_core.infrastructure.signalR;
 
 var builder = WebApplication.CreateBuilder(args);
 

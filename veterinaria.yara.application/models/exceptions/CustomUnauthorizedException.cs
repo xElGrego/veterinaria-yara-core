@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace veterinaria.yara.application.models.exceptions
+namespace veterinaria_yara_core.application.models.exceptions
 {
     public class CustomUnauthorizedException : BaseCustomException
     {
@@ -12,6 +6,5 @@ namespace veterinaria.yara.application.models.exceptions
         {
 
         }
-
     }
 }

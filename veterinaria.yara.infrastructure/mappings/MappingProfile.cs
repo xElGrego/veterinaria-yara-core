@@ -1,12 +1,12 @@
 using AutoMapper;
-using veterinaria.yara.domain.DTOs;
-using veterinaria.yara.domain.DTOs.Estados;
-using veterinaria.yara.domain.DTOs.Mascota;
-using veterinaria.yara.domain.DTOs.Raza;
-using veterinaria.yara.domain.DTOs.Usuario;
-using veterinaria.yara.domain.entities;
+using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.DTOs.Estados;
+using veterinaria_yara_core.domain.DTOs.Estados.Mascota;
+using veterinaria_yara_core.domain.DTOs.Raza;
+using veterinaria_yara_core.domain.DTOs.Usuario;
+using veterinaria_yara_core.domain.entities;
 
-namespace veterinaria.yara.infrastructure.mappings
+namespace veterinaria_yara_core.infrastructure.mappings
 {
     public class MappingProfile : Profile
     {

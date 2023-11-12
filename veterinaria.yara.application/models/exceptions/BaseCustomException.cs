@@ -1,4 +1,4 @@
-﻿namespace veterinaria.yara.application.models.exceptions
+namespace veterinaria_yara_core.application.models.exceptions
 {
     public class BaseCustomException : Exception
     {

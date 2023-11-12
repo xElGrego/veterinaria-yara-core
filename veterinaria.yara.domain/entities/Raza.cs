@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace veterinaria.yara.domain.entities
+namespace veterinaria_yara_core.domain.entities
 {
     public partial class Raza
     {

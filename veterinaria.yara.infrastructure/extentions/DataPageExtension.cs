@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using veterinaria.yara.domain.DTOs.Paginador;
+using veterinaria_yara_core.domain.DTOs.Paginador;
 
 public static class DataPageExtension
 {
