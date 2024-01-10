@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\veterinaria.yara.application\veterinaria-yara-core.application.csproj" />
+    <ProjectReference Include="..\veterinaria-yara-core.application\veterinaria-yara-core.application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

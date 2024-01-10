@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.Loggin\Common.Loggin.csproj" />
-    <ProjectReference Include="..\veterinaria.yara.infrastructure\veterinaria-yara-core.infrastructure.csproj" />
+    <ProjectReference Include="..\veterinaria-yara-core.infrastructure\veterinaria-yara-core.infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

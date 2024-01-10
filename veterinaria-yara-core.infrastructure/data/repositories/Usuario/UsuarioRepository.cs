@@ -88,7 +88,7 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
             {
                 usuario = await ObtenerRol(usuarioDTOParam);
 
-                if (usuario is null)
+                if (usuario.Nombres is null)
                 {
                     throw new VeterinariaYaraException("El correo registrado no existe");
                 }
@@ -258,9 +258,9 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                     message.Apellidos,
                     message.Rol,
                     message.Correo,
-                    UserAgent = httpContext.Request.Headers["User-Agent"],
-                    RemoteIpAddress = httpContext.Connection.RemoteIpAddress?.ToString(),
-                    Device = DetermineDeviceType(httpContext.Request.Headers["User-Agent"])
+                    //UserAgent = httpContext.Request.Headers["User-Agent"],
+                    //RemoteIpAddress = httpContext.Connection.RemoteIpAddress?.ToString(),
+                    //Device = DetermineDeviceType(httpContext.Request.Headers["User-Agent"])
                 };
 
                 var serializedData = JsonConvert.SerializeObject(objectGuardar);
