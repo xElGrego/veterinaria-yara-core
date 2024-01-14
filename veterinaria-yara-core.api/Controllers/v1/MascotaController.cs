@@ -141,14 +141,14 @@ namespace veterinaria_yara_core.api.Controllers.v1
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(MsDtoResponse<CrearResponse>), 200)]
+        [ProducesResponseType(typeof(MascotaDTO), 200)]
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/ultima-mascota")]
-        public async Task<ActionResult<MsDtoResponse<MascotaDTO>>> ObtenerUltimaMascota([FromHeader][Required] Guid IdUsuario)
+        public async Task<ActionResult<MascotaDTO>> ObtenerUltimaMascota([FromHeader][Required] Guid IdUsuario)
         {
             var response = await _mascotaRepository.UltimaMascota(IdUsuario);
-            return Ok(new MsDtoResponse<MascotaDTO>(response));
+            return Ok(response);
         }
 
         /// <summary>
@@ -158,14 +158,14 @@ namespace veterinaria_yara_core.api.Controllers.v1
         [HttpPost]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(MsDtoResponse<CrearResponse>), 200)]
+        [ProducesResponseType(typeof(CrearResponse), 200)]
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/ordenar-mascota")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> ReordenarMascota([FromBody][Required] List<ReordenarMascotaDTO> mascotas)
+        public async Task<ActionResult<CrearResponse>> ReordenarMascota([FromBody][Required] List<ReordenarMascotaDTO> mascotas)
         {
             var response = await _mascotaRepository.ReordenarMascota(mascotas);
-            return Ok(new MsDtoResponse<CrearResponse>(response));
+            return Ok(response);
         }
     }
 }

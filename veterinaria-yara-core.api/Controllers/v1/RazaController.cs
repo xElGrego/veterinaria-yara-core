@@ -63,10 +63,10 @@ namespace veterinaria_yara_core.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/consulta-razas-id")]
-        public async Task<ActionResult<MsDtoResponse<RazaDTO>>> ConsultaRazasId(Guid idRaza)
+        public async Task<ActionResult<RazaDTO>> ConsultaRazasId(Guid idRaza)
         {
             var response = await _razaRepository.ConsultarRazaId(idRaza);
-            return Ok(new MsDtoResponse<RazaDTO>(response));
+            return Ok(response);
         }
 
         [HttpPost]

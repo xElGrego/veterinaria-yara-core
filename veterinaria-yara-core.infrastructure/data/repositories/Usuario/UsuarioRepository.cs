@@ -235,7 +235,8 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                          .Where(ur => ur.IdRolNavigation != null)
                          .Select(ur => ur.IdRolNavigation.NombreRol)
                          .ToList()
-                 });
+                 })
+                 .Take(length);
 
                 usuarios = await usuariosConRoles.PaginationAsync(start, length, totalRegistros, _mapper);
             }

@@ -13,7 +13,6 @@ namespace veterinaria_yara_core.domain.entities
 
         public int IdEstado { get; set; }
         public string? Nombre { get; set; }
-
         public virtual ICollection<Mascota> Mascota { get; set; }
         public virtual ICollection<Usuario> Usuarios { get; set; }
     }

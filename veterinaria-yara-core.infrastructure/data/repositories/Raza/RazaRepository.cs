@@ -32,11 +32,22 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
         public async Task<PaginationFilterResponse<RazaDTO>> ConsultarRazas(string buscar, int start, int lenght)
         {
             PaginationFilterResponse<RazaDTO> razas = new();
-
             try
             {
-                razas = await _dataContext.Razas.AsNoTracking().OrderBy(r => r.FechaIngreso)
-                    .PaginationAsync<Raza, RazaDTO>(start, lenght, _mapper);
+                var totalRegistros = await _dataContext.Razas.AsNoTracking().CountAsync();
+
+                var razasQuery = _dataContext.Razas
+                 .OrderBy(x => x.FechaIngreso)
+                 .Select(x => new RazaDTO
+                 {
+                     Descripcion = x.Descripcion,
+                     IdRaza = x.IdRaza,
+                     Nombre = x.Nombre,
+                 })
+                 .Skip(start)
+                 .Take(lenght);
+
+                razas = await razasQuery.PaginationAsync(start, lenght, totalRegistros, _mapper);
             }
             catch (Exception ex)
             {

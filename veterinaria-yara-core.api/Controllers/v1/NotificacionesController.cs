@@ -29,7 +29,7 @@ namespace veterinaria_yara_core.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/notificaciones-ofertas")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> NotificacionesOfertas([FromBody][Required] string message)
+        public async Task<ActionResult<CrearResponse>> NotificacionesOfertas([FromBody][Required] string message)
         {
             var response = await _notificaciones.NotificacionOfertas(message);
             return Ok(response);
@@ -43,7 +43,7 @@ namespace veterinaria_yara_core.api.Controllers.v1
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/notificacion-usuario")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> NotificacionUsuario([FromBody][Required] string message, Guid idUsuario)
+        public async Task<ActionResult<CrearResponse>> NotificacionUsuario([FromBody][Required] string message, Guid idUsuario)
         {
             var response = await _notificaciones.NotificacionUsuario(message, idUsuario);
             return Ok(response);
