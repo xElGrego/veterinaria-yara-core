@@ -42,11 +42,11 @@ namespace veterinaria_yara_core.api.Controllers.v1
         //[Authorize(Policy = "SuperAdministrador")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(MsDtoResponse<CrearResponse>), 200)]
+        [ProducesResponseType(typeof(CrearResponse), 200)]
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
         [Route("/v1/veterinaria-yara/crear-usuario")]
-        public async Task<ActionResult<MsDtoResponse<CrearResponse>>> CrearUsuario([FromBody][Required] AgregarUsuarioDTO usuario)
+        public async Task<ActionResult<CrearResponse>> CrearUsuario([FromBody][Required] AgregarUsuarioDTO usuario)
         {
             var response = await _usuariorRepository.CrearUsuario(usuario);
             return Ok(response);
@@ -56,16 +56,16 @@ namespace veterinaria_yara_core.api.Controllers.v1
         /// Genera la lista de razas paginadas
         /// </summary>
         /// <param name="start"> Número de páginan dodne se requiere empezar la consulta </param>
-        /// <param name="lenght"> Cantidad de items que se requiere obtener </param>
+        /// <param name="length"> Cantidad de items que se requiere obtener </param>
         /// <param name="nombre"> Nombre de la mascota a buscar </param>
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(MsDtoResponse<PaginationFilterResponse<UsuarioDTO>>), 200)]
+        [ProducesResponseType(typeof(PaginationFilterResponse<UsuarioDTO>), 200)]
         [ProducesResponseType(typeof(MsDtoResponseError), 400)]
         [ProducesResponseType(typeof(MsDtoResponseError), 500)]
-        [Route("/v1/veterinaria-yara/consulta-usuarios")]
-        public async Task<ActionResult<PaginationFilterResponse<MascotaDTO>>> ConsultarMascotasUsuario(int start, Int16 length, Guid idUsuario,
+        [Route("/v1/veterinaria-yara/consultar-usuarios")]
+        public async Task<ActionResult<PaginationFilterResponse<UsuarioDTO>>> ConsultarUsuarios(int start, Int16 length, Guid idUsuario,
         CancellationToken cancellationToken)
         {
             var response = await _usuariorRepository.ConsultarUsuarios(start, length, cancellationToken);

@@ -26,7 +26,6 @@ namespace veterinaria_yara_core.api.Controllers.v1
         /// <param name="start"> Número de páginan dodne se requiere empezar la consulta </param>
         /// <param name="lenght"> Cantidad de items que se requiere obtener </param>
         /// <param name="nombre"> Nombre de la mascota a buscar </param>
-
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
