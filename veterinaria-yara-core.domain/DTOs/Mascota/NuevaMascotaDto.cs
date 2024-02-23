@@ -1,4 +1,4 @@
-namespace veterinaria_yara_core.domain.DTOs.Estados.Mascota
+namespace veterinaria_yara_core.domain.DTOs.Mascota
 {
     public class NuevaMascotaDto
     {

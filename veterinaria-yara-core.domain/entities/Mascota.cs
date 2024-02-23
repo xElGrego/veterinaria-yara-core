@@ -24,10 +24,10 @@ namespace veterinaria_yara_core.domain.entities
         /// Sirve para tener el orden de posicion en el front
         /// </summary>
         public int? Orden { get; set; }
-
-        public virtual Estado? EstadoNavigation { get; set; }
+        public virtual EstadoUsuario? EstadoUsuarioNavigation { get; set; }
         public virtual Raza? IdRazaNavigation { get; set; }
         public virtual ICollection<Historial> Historials { get; set; }
+        public virtual ICollection<Cita> Cita { get; set; }
         public virtual ICollection<UsuarioMascota> UsuarioMascota { get; set; }
     }
 }

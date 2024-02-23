@@ -1,4 +1,4 @@
-namespace veterinaria_yara_core.domain.DTOs.Estados.Mascota
+namespace veterinaria_yara_core.domain.DTOs.Mascota
 {
     public class MascotaDTO
     {
@@ -13,6 +13,5 @@ namespace veterinaria_yara_core.domain.DTOs.Estados.Mascota
         public DateTime? FechaModificacion { get; set; }
         public int? Estado { get; set; }
         public int? Orden { get; set; }
-
     }
 }

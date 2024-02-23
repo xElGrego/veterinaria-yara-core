@@ -1,7 +1,8 @@
 using AutoMapper;
 using veterinaria_yara_core.domain.DTOs;
+using veterinaria_yara_core.domain.DTOs.Cita;
 using veterinaria_yara_core.domain.DTOs.Estados;
-using veterinaria_yara_core.domain.DTOs.Estados.Mascota;
+using veterinaria_yara_core.domain.DTOs.Mascota;
 using veterinaria_yara_core.domain.DTOs.Raza;
 using veterinaria_yara_core.domain.DTOs.Usuario;
 using veterinaria_yara_core.domain.entities;
@@ -14,8 +15,7 @@ namespace veterinaria_yara_core.infrastructure.mappings
         {
 
             CreateMap<Mascota, MascotaDTO>().ReverseMap();
-
-
+            CreateMap<Cita, CitaDTO>().ReverseMap();
 
             CreateMap<AgregarUsuarioDTO, Usuario>()
             .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now))
@@ -43,10 +43,10 @@ namespace veterinaria_yara_core.infrastructure.mappings
 
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
 
-
             CreateMap<MensajeDTO, Mensaje>();
 
-            CreateMap<Estado, EstadosDTO>().ReverseMap();
+            CreateMap<EstadoUsuario, EstadosDTO>().ReverseMap();
+            CreateMap<Cita, NuevaCitaDTO>().ReverseMap();
 
         }
     }

@@ -16,23 +16,73 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
             : base(options)
         {
         }
-
-        public virtual DbSet<Estado> Estados { get; set; } = null!;
+        public virtual DbSet<Cita> Citas { get; set; } = null!;
+        public virtual DbSet<EstadoCitum> EstadoCita { get; set; } = null!;
+        public virtual DbSet<EstadoUsuario> EstadoUsuarios { get; set; } = null!;
         public virtual DbSet<Historial> Historials { get; set; } = null!;
         public virtual DbSet<Mascota> Mascotas { get; set; } = null!;
         public virtual DbSet<Mensaje> Mensajes { get; set; } = null!;
         public virtual DbSet<Raza> Razas { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
-        public virtual DbSet<TipoEvento> TipoEventos { get; set; } = null!;
+        public virtual DbSet<TipoCitum> TipoCita { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
         public virtual DbSet<UsuarioMascota> UsuarioMascotas { get; set; } = null!;
         public virtual DbSet<UsuarioRole> UsuarioRoles { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Estado>(entity =>
+            modelBuilder.Entity<Cita>(entity =>
+            {
+                entity.HasKey(e => e.IdCita)
+                    .HasName("PK__Citas__394B020215D6AD08");
+
+                entity.Property(e => e.IdCita).ValueGeneratedNever();
+
+                entity.Property(e => e.Fecha).HasPrecision(3);
+
+                entity.HasOne(d => d.IdEstadoCitaNavigation)
+                    .WithMany(p => p.Cita)
+                    .HasForeignKey(d => d.IdEstadoCita)
+                    .HasConstraintName("FK__Citas__IdEstadoC__40058253");
+
+                entity.HasOne(d => d.IdMascotaNavigation)
+                    .WithMany(p => p.Cita)
+                    .HasForeignKey(d => d.IdMascota)
+                    .HasConstraintName("FK__Citas__IdMascota__3E1D39E1");
+
+                entity.HasOne(d => d.IdTipoCitaNavigation)
+                    .WithMany(p => p.Cita)
+                    .HasForeignKey(d => d.IdTipoCita)
+                    .HasConstraintName("FK__Citas__TipoCita_1A335E2A");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Cita)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK__Citas__IdUsuario__3F115E1A");
+            });
+
+            modelBuilder.Entity<EstadoCitum>(entity =>
+            {
+                entity.HasKey(e => e.IdEstadoCita)
+                    .HasName("PK__EstadoCi__EF486D2299168CCA");
+
+                entity.Property(e => e.IdEstadoCita).ValueGeneratedNever();
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<EstadoUsuario>(entity =>
             {
                 entity.HasKey(e => e.IdEstado)
                     .HasName("PK__Estados__FBB0EDC178D786E5");
+
+                entity.ToTable("EstadoUsuario");
 
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(100)
@@ -54,12 +104,6 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                     .WithMany(p => p.Historials)
                     .HasForeignKey(d => d.IdMascota)
                     .HasConstraintName("FK__Historial__IdMas__30C33EC3");
-
-                entity.HasOne(d => d.IdTipoEventoNavigation)
-                    .WithMany(p => p.Historials)
-                    .HasForeignKey(d => d.IdTipoEvento)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Historial__IdTip__31B762FC");
             });
 
             modelBuilder.Entity<Mascota>(entity =>
@@ -81,7 +125,7 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
 
                 entity.Property(e => e.Peso).HasColumnType("decimal(5, 2)");
 
-                entity.HasOne(d => d.EstadoNavigation)
+                entity.HasOne(d => d.EstadoUsuarioNavigation)
                     .WithMany(p => p.Mascota)
                     .HasForeignKey(d => d.Estado)
                     .HasConstraintName("FK_Estados_IdEstado");
@@ -133,18 +177,20 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TipoEvento>(entity =>
+            modelBuilder.Entity<TipoCitum>(entity =>
             {
-                entity.HasKey(e => e.IdTipoEvento)
-                    .HasName("PK__TipoEven__CDB3A3BE529F2D74");
+                entity.HasKey(e => e.IdTipoCita)
+                    .HasName("PK__TipoCita__1246758E65B0ECD3");
 
-                entity.ToTable("TipoEvento");
+                entity.Property(e => e.IdTipoCita).ValueGeneratedNever();
 
-                entity.Property(e => e.IdTipoEvento).ValueGeneratedNever();
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Descripcion).HasColumnType("text");
-
-                entity.Property(e => e.Nombre).HasMaxLength(255);
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Usuario>(entity =>
@@ -170,7 +216,7 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.EstadoNavigation)
+                entity.HasOne(d => d.IdEstadoUsuarioNavigation)
                     .WithMany(p => p.Usuarios)
                     .HasForeignKey(d => d.Estado)
                     .HasConstraintName("PK_Estados_IdEstado");
@@ -216,5 +262,6 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
     }
 }

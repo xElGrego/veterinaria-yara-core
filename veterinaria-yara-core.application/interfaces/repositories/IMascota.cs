@@ -1,5 +1,5 @@
 using veterinaria_yara_core.domain.DTOs;
-using veterinaria_yara_core.domain.DTOs.Estados.Mascota;
+using veterinaria_yara_core.domain.DTOs.Mascota;
 using veterinaria_yara_core.domain.DTOs.Paginador;
 
 namespace veterinaria_yara_core.application.interfaces.repositories

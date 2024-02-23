@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using veterinaria_yara_core.application.interfaces.repositories;
 using veterinaria_yara_core.application.models.dtos;
 using veterinaria_yara_core.domain.DTOs;
-using veterinaria_yara_core.domain.DTOs.Estados.Mascota;
 using veterinaria_yara_core.domain.DTOs.Paginador;
 using veterinaria_yara_core.domain.DTOs.Usuario;
 

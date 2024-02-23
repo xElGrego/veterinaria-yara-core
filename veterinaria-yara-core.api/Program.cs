@@ -6,12 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using veterinaria_yara_core.api.Extensions;
-using veterinaria_yara_core.api.Service;
 using veterinaria_yara_core.infrastructure.extentions;
 using veterinaria_yara_core.infrastructure.ioc;
 using veterinaria_yara_core.infrastructure.signalR;
 using veterinaria_yara_core.api.Extensions;
-using veterinaria_yara_core.api.Service;
 using veterinaria_yara_core.infrastructure.signalR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,8 +70,6 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 
 });
-
-builder.Services.AddHostedService<RabbitMQService>();
 
 builder.Services.RegisterDependencies();
 builder.Services.AddInfraestructure(builder.Configuration);

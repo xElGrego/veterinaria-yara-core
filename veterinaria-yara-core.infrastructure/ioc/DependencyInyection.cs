@@ -10,8 +10,6 @@ using veterinaria_yara_core.application.interfaces.repositories;
 using veterinaria_yara_core.infrastructure.data.repositories;
 using veterinaria_yara_core.infrastructure.data.repositories.chat;
 using veterinaria_yara_core.infrastructure.data.repositories.estados;
-using veterinaria_yara_core.infrastructure.data.repositories.notificaciones;
-using veterinaria_yara_core.infrastructure.data.repositories.rabbitmq;
 using veterinaria_yara_core.infrastructure.mappings;
 
 namespace veterinaria_yara_core.infrastructure.ioc
@@ -26,10 +24,8 @@ namespace veterinaria_yara_core.infrastructure.ioc
             services.AddScoped<IMascota, MascotaRestRepository>();
             services.AddScoped<IUsuario, UsuarioRepository>();
             services.AddScoped<IChat, Chat>();
-            services.AddScoped<INotificaciones, INotificacionesRepository>();
             services.AddScoped<IEstados, EstadosRepository>();
-            services.AddSingleton<IRabbitMQ, RabbitMQRepository>();
-
+            services.AddScoped<ICita, CitaRepository>();
 
             var builderConnection = new SqlConnectionStringBuilder(configuration.GetConnectionString("DefaultConnection"));
             builderConnection.Password = "yara19975";

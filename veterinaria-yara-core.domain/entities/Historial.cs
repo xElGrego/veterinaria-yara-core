@@ -10,8 +10,7 @@ namespace veterinaria_yara_core.domain.entities
         public string? Descripcion { get; set; }
         public Guid IdTipoEvento { get; set; }
         public Guid? IdMascota { get; set; }
-
         public virtual Mascota? IdMascotaNavigation { get; set; }
-        public virtual TipoEvento IdTipoEventoNavigation { get; set; } = null!;
+        //public virtual TipoEvento IdTipoEventoNavigation { get; set; } = null!;
     }
 }

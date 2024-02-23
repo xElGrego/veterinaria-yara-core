@@ -26,7 +26,7 @@ namespace veterinaria_yara_core.infrastructure.data.repositories.estados
 
             try
             {
-                var searchData = await _dataContext.Estados.ToListAsync();
+                var searchData = await _dataContext.EstadoUsuarios.ToListAsync();
                 if (searchData == null)
                 {
                     throw new VeterinariaYaraException("No existen estados en la tabla");

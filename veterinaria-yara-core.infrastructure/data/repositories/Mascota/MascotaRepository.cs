@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using veterinaria_yara_core.application.interfaces.repositories;
 using veterinaria_yara_core.application.models.exceptions;
 using veterinaria_yara_core.domain.DTOs;
-using veterinaria_yara_core.domain.DTOs.Estados.Mascota;
+using veterinaria_yara_core.domain.DTOs.Mascota;
 using veterinaria_yara_core.domain.DTOs.Paginador;
 using veterinaria_yara_core.domain.entities;
 
@@ -319,7 +319,7 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                         mascota => mascota.IdMascota,
                         usuarioMascota => usuarioMascota.IdMascota,
                         (mascota, usuarioMascota) => usuarioMascota)
-                    .Where(mascota => mascota.IdUsuario == idUsuario)
+                    .Where(mascota => idUsuario == Guid.Empty || mascota.IdUsuario == idUsuario)
                     .CountAsync();
 
                 var mascotasQuery = _dataContext.Mascotas
@@ -340,12 +340,8 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                             Estado = mascota.Estado,
                             Orden = mascota.Orden
                         })
+                    .Where(mascota => idUsuario == Guid.Empty || mascota.IdUsuario == idUsuario)
                     .Take(length);
-
-                if (idUsuario != Guid.Empty)
-                {
-                    mascotasQuery = mascotasQuery.Where(mascota => mascota.IdUsuario == idUsuario);
-                }
 
                 mascotas = await mascotasQuery.PaginationAsync(start, length, totalRegistros, _mapper);
             }

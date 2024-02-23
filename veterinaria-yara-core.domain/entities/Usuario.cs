@@ -21,8 +21,8 @@ namespace veterinaria_yara_core.domain.entities
         public DateTime? FechaModificacion { get; set; }
         public string? Correo { get; set; }
         public int? Estado { get; set; }
-
-        public virtual Estado? EstadoNavigation { get; set; }
+        public virtual EstadoUsuario? IdEstadoUsuarioNavigation { get; set; }
+        public virtual ICollection<Cita> Cita { get; set; }
         public virtual ICollection<Mensaje> MensajeDestinatarios { get; set; }
         public virtual ICollection<Mensaje> MensajeRemitentes { get; set; }
         public virtual ICollection<UsuarioMascota> UsuarioMascota { get; set; }
