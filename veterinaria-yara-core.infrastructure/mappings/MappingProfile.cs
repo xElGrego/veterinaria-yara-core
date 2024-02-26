@@ -15,7 +15,12 @@ namespace veterinaria_yara_core.infrastructure.mappings
         {
 
             CreateMap<Mascota, MascotaDTO>().ReverseMap();
-            CreateMap<Cita, CitaDTO>().ReverseMap();
+
+            CreateMap<Cita, CitaDTO>()
+            .ForMember(dest => dest.Nombres, opt => opt.MapFrom(src => src.IdUsuarioNavigation.Nombres))
+            .ForMember(dest => dest.Correo, opt => opt.MapFrom(src => src.IdUsuarioNavigation.Correo)
+            );
+
 
             CreateMap<AgregarUsuarioDTO, Usuario>()
             .ForMember(x => x.FechaIngreso, d => d.MapFrom(model => DateTime.Now))

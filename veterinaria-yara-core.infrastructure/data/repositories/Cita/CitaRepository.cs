@@ -69,6 +69,7 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
             {
                 var citasDia = await _dataContext.Citas
                     .Where(x => x.Fecha.Date == dia.Date && x.Fecha.TimeOfDay <= TimeSpan.FromHours(12))
+                    .Include(x => x.IdUsuarioNavigation)
                     .ToListAsync();
 
                 result = _mapper.Map<List<CitaDTO>>(citasDia);
