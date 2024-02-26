@@ -290,5 +290,10 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                 return "Desktop";
             }
         }
+
+        //public async Task<UsuarioDTO> ConsultaUsuario(Guid IdUsuario)
+        //{
+
+        //}
     }
 }

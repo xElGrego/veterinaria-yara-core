@@ -7,9 +7,7 @@ using veterinaria_yara_core.application.interfaces.repositories;
 using veterinaria_yara_core.application.models.exceptions;
 using veterinaria_yara_core.domain.DTOs;
 using veterinaria_yara_core.domain.DTOs.Cita;
-using veterinaria_yara_core.domain.DTOs.Mascota;
 using veterinaria_yara_core.domain.DTOs.Paginador;
-using veterinaria_yara_core.domain.DTOs.Raza;
 using veterinaria_yara_core.domain.entities;
 
 namespace veterinaria_yara_core.infrastructure.data.repositories
@@ -81,6 +79,42 @@ namespace veterinaria_yara_core.infrastructure.data.repositories
                 throw new VeterinariaYaraException(ex.Message);
             }
             return result;
+        }
+
+        public async Task<CrearResponse> ActualizarCita(Guid idCita, string estadoCita)
+        {
+            try
+            {
+#pragma warning disable CA1304 // Especificar CultureInfo
+                var idEstadoCita = await _dataContext.EstadoCita
+                    .Where(x => x.Nombre.ToUpper() == estadoCita.ToUpper())
+                    .Select(x => x.IdEstadoCita)
+                    .FirstOrDefaultAsync();
+#pragma warning restore CA1304 // Especificar CultureInfo
+
+                if (idEstadoCita == Guid.Empty)
+                {
+                    throw new VeterinariaYaraException("El estado de cita no existe.");
+                }
+
+                var cita = await _dataContext.Citas.FindAsync(idCita) ?? throw new VeterinariaYaraException("La cita no existe.");
+
+                cita.IdEstadoCita = idEstadoCita;
+                _dataContext.Citas.Update(cita);
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error actualizar cita [" + JsonConvert.SerializeObject(idCita) + "]", ex);
+                throw new VeterinariaYaraException(ex.Message);
+            }
+
+            var response = new CrearResponse
+            {
+                Response = "La cita fue actualizada con éxito"
+            };
+
+            return response;
         }
 
         public async Task<CrearResponse> CrearCita(NuevaCitaDTO citaParam)

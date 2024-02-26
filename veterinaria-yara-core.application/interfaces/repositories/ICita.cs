@@ -9,5 +9,6 @@ namespace veterinaria_yara_core.application.interfaces.repositories
         Task<PaginationFilterResponse<CitaDTO>> ConsultaCitasUsuario(int start, int length, Guid idUsuario, CancellationToken cancellationToken);
         Task<List<CitaDTO>> ConsultarCitasDia(DateTime dia);
         Task<CrearResponse> CrearCita(NuevaCitaDTO cita);
+        Task<CrearResponse> ActualizarCita(Guid idCita, string estadoCita);
     }
 }

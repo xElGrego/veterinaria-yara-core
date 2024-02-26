@@ -44,7 +44,6 @@ namespace veterinaria_yara_core.api.Controllers.v1
         /// Genera la lista de citas paginadas por usuario
         /// </summary>
         /// <param name="dia">Dia exacto para traer las citas que estén agendadas.</param>
-
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
@@ -55,6 +54,23 @@ namespace veterinaria_yara_core.api.Controllers.v1
         public async Task<ActionResult<PaginationFilterResponse<CitaDTO>>> ConsultarCitasDia(DateTime dia)
         {
             var response = await _citaRepository.ConsultarCitasDia(dia);
+            return Ok(response);
+        }
+
+
+        /// <summary>
+        /// Método para editar el estado de la cita
+        /// </summary>
+        [HttpPut]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(CrearResponse), 200)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 400)]
+        [ProducesResponseType(typeof(MsDtoResponseError), 500)]
+        [Route("/v1/veterinaria-yara/actualizar-estado-cita")]
+        public async Task<ActionResult<CrearResponse>> ActualizarCita([FromBody][Required] ActualizaCitaDTO cita)
+        {
+            var response = await _citaRepository.ActualizarCita(cita.IdCita, cita.EstadoCita);
             return Ok(response);
         }
 

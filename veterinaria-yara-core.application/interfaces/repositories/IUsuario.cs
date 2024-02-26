@@ -9,5 +9,6 @@ namespace veterinaria_yara_core.application.interfaces.repositories
         Task<NuevoUsuarioDTO> Login(UsuarioLogeoDTO usuario);
         Task<CrearResponse> CrearUsuario(AgregarUsuarioDTO usuario);
         Task<PaginationFilterResponse<UsuarioDTO>> ConsultarUsuarios(int start, int length, CancellationToken cancellationToken);
+        //Task<UsuarioDTO> ConsultaUsuario(Guid IdUsuario);
     }
 }
